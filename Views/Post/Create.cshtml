@@ -7,6 +7,16 @@
 <form asp-action="Create" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
+        <label asp-for="OriginalTitle" class="form-label">Post Title (English or Arabic)</label>
+        <input asp-for="OriginalTitle" class="form-control" />
+        <span asp-validation-for="OriginalTitle" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TranslatedTitle" class="form-label">Post Title (Other Language)</label>
+        <input asp-for="TranslatedTitle" class="form-control" />
+        <span asp-validation-for="TranslatedTitle" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
         <label asp-for="OriginalBody" class="form-label">Post Body: Your comment in english or arabic</label>
         <textarea asp-for="OriginalBody" class="form-control"></textarea>
         <span asp-validation-for="OriginalBody" class="text-danger"></span>

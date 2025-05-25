@@ -14,6 +14,8 @@ namespace Baynatna.Models
         public string? VoiceMessageUrl { get; set; }
         public bool IsQuarantined { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string OriginalTitle { get; set; } = null!;
+        public string? TranslatedTitle { get; set; }
 
         public User User { get; set; } = null!;
         public ICollection<Comment>? Comments { get; set; }

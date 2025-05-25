@@ -1,0 +1,139 @@
+/* Common styles for Baynatna */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+@media (max-width: 900px) {
+    .posts-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 600px) {
+    .posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.post-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.post-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: #222;
+}
+.post-card-tag {
+    display: flex;
+    align-items: center;
+    background: #3ad5d7;
+    color: #111;
+    font-weight: normal;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    width: fit-content;
+    min-width: 80px;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-word;
+    white-space: normal;
+}
+.post-card-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+.post-votes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.post-upvotes {
+    background: #d1fae5;
+    color: #059669;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.7rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.post-downvotes {
+    background: #fee2e2;
+    color: #dc2626;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.7rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.post-details-btn {
+    background: transparent;
+    color: #3ad5d7;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.post-details-btn:hover, .post-details-btn:focus {
+    color: #111;
+    background: transparent;
+    border: none;
+}
+.load-more-btn {
+    background: #3ad5d7;
+    color: #111;
+    border: 1.5px solid #3ad5d7;
+    font-weight: bold;
+    padding: 0.7rem 2.5rem;
+    border-radius: 2rem;
+    margin: 2rem auto 0 auto;
+    display: block;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.load-more-btn:hover, .load-more-btn:focus {
+    background: #111;
+    color: #fff;
+    border: 1.5px solid #111;
+}
+.navbar-turquoise {
+    background: #fff !important;
+    color: #111 !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+.footer-turquoise {
+    background: #27242d;
+    color: #fff !important;
+    text-align: center;
+}
+.navbar-turquoise .navbar-brand, .navbar-turquoise .btn, .navbar-turquoise .nav-link {
+    color: #111 !important;
+}
+.btn-header {
+    background: transparent !important;
+    color: #111 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: bold !important;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-header:hover, .btn-header:focus {
+    background: transparent !important;
+    color: #3ad5d7 !important;
+    border: none !important;
+} 

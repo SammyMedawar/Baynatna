@@ -7,39 +7,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Baynatna.styles.css" asp-append-version="true" />
-    <style>
-        .navbar-turquoise {
-            background: #fff !important;
-            color: #111 !important;
-            border-bottom: none !important;
-            box-shadow: none !important;
-        }
-        .footer-turquoise {
-            background: #27242d;
-            color: #fff !important;
-            text-align: center;
-        }
-        .navbar-turquoise .navbar-brand, .navbar-turquoise .btn, .navbar-turquoise .nav-link {
-            color: #111 !important;
-        }
-        .btn-header {
-            background: transparent !important;
-            color: #111 !important;
-            border: none !important;
-            box-shadow: none !important;
-            font-weight: bold !important;
-            transition: background 0.2s, color 0.2s;
-        }
-        .btn-header:hover, .btn-header:focus {
-            background: transparent !important;
-            color: #3ad5d7 !important;
-            border: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/common.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-turquoise">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-turquoise header-padding">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Baynatna</a>
                 <div class="d-flex align-items-center ms-auto">
@@ -69,19 +41,19 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-match-height.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/scripts/functions.js"></script>
     <script>
-        // Font size control
-        let fontSize = 16;
-        document.getElementById('increase-font').onclick = function() {
-            fontSize = Math.min(fontSize + 2, 32);
-            document.body.style.fontSize = fontSize + 'px';
-        };
-        document.getElementById('decrease-font').onclick = function() {
-            fontSize = Math.max(fontSize - 2, 10);
-            document.body.style.fontSize = fontSize + 'px';
-        };
+        $(function() {
+            if ($('.post-card-tag').length > 0) {
+                $('.post-card-tag').matchHeight();
+            }
+            if ($('.post-card-title').length > 0) {
+                $('.post-card-title').matchHeight();
+            }
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

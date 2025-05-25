@@ -1,0 +1,94 @@
+@model Baynatna.ViewModels.PostListResult
+@{
+    ViewData["Title"] = "Posts";
+    var tags = ViewBag.Tags as List<Baynatna.ViewModels.TagViewModel>;
+    var query = ViewBag.Query as Baynatna.ViewModels.PostListQuery;
+}
+<link rel="stylesheet" href="~/css/common.css" />
+<link rel="stylesheet" href="~/css/posts.css" />
+<div class="header-padding">
+<form method="get" class="posts-toolbar" id="postsFilterForm">
+    <input type="text" name="Search" class="form-control" placeholder="Search posts..." value="@query?.Search" />
+    <select name="TagId" class="form-select">
+        <option value="">All Ministries</option>
+        @if (tags != null)
+        {
+            foreach (var tag in tags)
+            {
+                <!option value="@tag.Id" @(query?.TagId == tag.Id ? "selected" : null)>@tag.Name</!option>
+            }
+        }
+    </select>
+    <select name="SortBy" class="form-select">
+        <!option value="date" @(query?.SortBy == "date" ? "selected" : null)>Sort by Date</!option>
+        <!option value="likes" @(query?.SortBy == "likes" ? "selected" : null)>Sort by Likes</!option>
+    </select>
+    <select name="SortDir" class="form-select">
+        <!option value="desc" @(query?.SortDir == "desc" ? "selected" : null)>Desc</!option>
+        <!option value="asc" @(query?.SortDir == "asc" ? "selected" : null)>Asc</!option>
+    </select>
+    <button type="button" class="btn btn-adv" data-bs-toggle="modal" data-bs-target="#advFilterModal">Advanced Filters</button>
+    <button type="submit" class="btn btn-primary d-none">Apply</button>
+</form>
+<!-- Advanced Filters Modal -->
+<div class="modal fade" id="advFilterModal" tabindex="-1" aria-labelledby="advFilterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="advFilterModalLabel">Advanced Filters</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label for="DateFrom" class="form-label">Date From</label>
+            <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@(query?.DateFrom?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
+        </div>
+        <div class="mb-3">
+            <label for="DateTo" class="form-label">Date To</label>
+            <input type="date" class="form-control" id="DateTo" name="DateTo" value="@(query?.DateTo?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-adv" form="postsFilterForm">Apply Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="posts-grid">
+@foreach (var post in Model.Posts)
+{
+    <div class="post-card">
+        <div class="post-card-title">@post.Title</div>
+        @if (!string.IsNullOrWhiteSpace(post.Tag))
+        {
+            <div class="post-card-tag">@post.Tag</div>
+        }
+        <div class="post-card-row">
+            <div class="post-votes">
+                <span class="post-upvotes"><span class="me-1">👍</span>+@post.Upvotes</span>
+                <span class="post-downvotes"><span class="me-1">👎</span>-@post.Downvotes</span>
+            </div>
+            <form asp-controller="Post" asp-action="Details" method="get" style="margin-left:auto;">
+                <input type="hidden" name="id" value="@post.Id" />
+                <button type="submit" class="post-details-btn">Details <span>&rarr;</span></button>
+            </form>
+        </div>
+    </div>
+}
+</div>
+@if (Model.HasMore)
+{
+    <form method="get" class="text-center">
+        <input type="hidden" name="Search" value="@query?.Search" />
+        <input type="hidden" name="TagId" value="@query?.TagId" />
+        <input type="hidden" name="SortBy" value="@query?.SortBy" />
+        <input type="hidden" name="SortDir" value="@query?.SortDir" />
+        <input type="hidden" name="DateFrom" value="@query?.DateFrom?.ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="DateTo" value="@query?.DateTo?.ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="Page" value="@(query?.Page + 1 ?? 2)" />
+        <button type="submit" class="load-more-btn">Load More</button>
+    </form>
+}
+</div>
+</div> 

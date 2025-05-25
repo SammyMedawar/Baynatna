@@ -2,68 +2,8 @@
     ViewData["Title"] = "Home Page";
     var isLoggedIn = Context.Session.GetInt32("UserId") != null;
 }
-<style>
-    .hero-banner {
-        height: 40vh;
-        /* width: 100vw; */
-        min-width: unset;
-        max-width: unset;
-        background: #e0e0e0 url('https://via.placeholder.com/1200x500?text=Baynatna+Hero+Banner') center/cover no-repeat;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-radius: 1rem;
-        margin: 2rem 0 3rem 0;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-    }
-    .home-options {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-    }
-    .home-option {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 20vw;
-        min-width: 120px;
-        max-width: 300px;
-        height: 120px;
-        background: #f8f9fa;
-        border-radius: 1rem;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        text-decoration: none;
-        color: #222;
-        font-weight: normal;
-        transition: box-shadow 0.2s, background 0.2s, color 0.2s;
-    }
-    .home-option.posts {
-        background: #3ad5d7;
-        color: #111;
-        font-weight: bold;
-    }
-    .home-option.my-posts {
-        background: #fff;
-        color: #222;
-        font-weight: bold;
-    }
-    .home-option.login, .home-option.logout {
-        background: #27242d;
-        color: #fff;
-        font-weight: bold;
-    }
-    .home-option:hover {
-        cursor: pointer;
-        /* No color change on hover */
-    }
-    .home-option-icon {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-</style>
+<link rel="stylesheet" href="~/css/common.css" />
+<link rel="stylesheet" href="~/css/home.css" />
 <div class="hero-banner">
     <h1 class="display-3 fw-bold text-center">Welcome to Baynatna</h1>
     <p class="lead text-center">this is a placeholder banner</p>

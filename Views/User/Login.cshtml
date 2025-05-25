@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Login";
 }
+<div class="header-padding">
 <h2>Login</h2>
 <form asp-action="Login" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -19,6 +20,7 @@
     <a asp-action="Register" class="btn btn-link">Register</a>
     <a asp-action="TokenRequest" class="btn btn-link">Need a token?</a>
 </form>
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 } 

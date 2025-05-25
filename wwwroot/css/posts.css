@@ -1,0 +1,29 @@
+/* Posts page specific styles */
+.posts-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.posts-toolbar .form-select, .posts-toolbar .form-control {
+    min-width: 180px;
+    max-width: 220px;
+}
+.posts-toolbar .btn-adv {
+    background: #3ad5d7;
+    color: #111;
+    border: 1.5px solid #3ad5d7;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.posts-toolbar .btn-adv:hover, .posts-toolbar .btn-adv:focus {
+    background: #111;
+    color: #fff;
+    border: 1.5px solid #111;
+}
+.modal-content {
+    border-radius: 1rem;
+} 

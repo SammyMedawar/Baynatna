@@ -47,7 +47,17 @@ namespace Baynatna.Controllers
                 return View(model);
             }
             // TODO: Redirect to post details or home for now
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Post");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index([FromQuery] PostListQuery query)
+        {
+            var postsResult = await _postService.GetPostsAsync(query);
+            var tags = await _postService.GetAllTagsAsync();
+            ViewBag.Tags = tags;
+            ViewBag.Query = query;
+            return View(postsResult);
         }
     }
 } 

@@ -166,6 +166,8 @@ CREATE TABLE Posts (
     ThreadId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     UserId INT NOT NULL,
     OriginalBody NVARCHAR(MAX) NOT NULL,
+    OriginalTitle NVARCHAR(255) NOT NULL,
+    TranslatedTitle NVARCHAR(255),
     TranslatedBody NVARCHAR(MAX) NULL,
     IsTranslatedByModerator BIT DEFAULT 0,
     VoiceMessageUrl NVARCHAR(500) NULL,

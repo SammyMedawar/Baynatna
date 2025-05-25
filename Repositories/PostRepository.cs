@@ -16,7 +16,12 @@ namespace Baynatna.Repositories
 
         public async Task<Post?> GetByIdAsync(int id) => await _context.Posts.FindAsync(id);
 
-        public async Task<IEnumerable<Post>> GetAllAsync() => await _context.Posts.ToListAsync();
+        public async Task<IEnumerable<Post>> GetAllAsync() =>
+            await _context.Posts
+                .Include(p => p.PostTags)
+                    .ThenInclude(pt => pt.Tag)
+                .Include(p => p.PostVotes)
+                .ToListAsync();
 
         public async Task AddAsync(Post entity) => await _context.Posts.AddAsync(entity);
 
