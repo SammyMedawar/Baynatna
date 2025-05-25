@@ -1,16 +1,19 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Baynatna.Models;
+using Baynatna.Services;
 
 namespace Baynatna.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IHomeService _homeService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IHomeService homeService)
     {
         _logger = logger;
+        _homeService = homeService;
     }
 
     public IActionResult Index()

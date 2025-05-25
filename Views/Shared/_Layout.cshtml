@@ -7,22 +7,51 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Baynatna.styles.css" asp-append-version="true" />
+    <style>
+        .navbar-turquoise {
+            background: #fff !important;
+            color: #111 !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
+        .footer-turquoise {
+            background: #27242d;
+            color: #fff !important;
+            text-align: center;
+        }
+        .navbar-turquoise .navbar-brand, .navbar-turquoise .btn, .navbar-turquoise .nav-link {
+            color: #111 !important;
+        }
+        .btn-header {
+            background: transparent !important;
+            color: #111 !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-weight: bold !important;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-header:hover, .btn-header:focus {
+            background: transparent !important;
+            color: #3ad5d7 !important;
+            border: none !important;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-turquoise">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Baynatna</a>
                 <div class="d-flex align-items-center ms-auto">
-                    <button id="decrease-font" class="btn btn-outline-secondary me-2" title="Decrease font size">A-</button>
-                    <button id="increase-font" class="btn btn-outline-secondary me-2" title="Increase font size">A+</button>
+                    <button id="decrease-font" class="btn btn-header me-2" title="Decrease font size">A-</button>
+                    <button id="increase-font" class="btn btn-header me-2" title="Increase font size">A+</button>
                     @if (Context.Session.GetInt32("UserId") != null)
                     {
-                        <a class="btn btn-success" asp-controller="Post" asp-action="Create">Create Post</a>
+                        <a class="btn btn-header" asp-controller="Post" asp-action="Create">Create Post</a>
                     }
                     else
                     {
-                        <a class="btn btn-primary" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                        <a class="btn btn-header" asp-area="" asp-controller="User" asp-action="Login">Login</a>
                     }
                 </div>
             </div>
@@ -34,7 +63,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted footer-turquoise">
         <div class="container">
             &copy; 2025 - Baynatna - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
