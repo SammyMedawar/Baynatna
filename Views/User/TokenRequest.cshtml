@@ -1,0 +1,33 @@
+@model Baynatna.ViewModels.TokenRequestViewModel
+@{
+    ViewData["Title"] = "Token Request";
+}
+<h2>Request a Verification Token</h2>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+<form asp-action="TokenRequest" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdOrProof" class="form-label"></label>
+        <input asp-for="IdOrProof" class="form-control" />
+        <span asp-validation-for="IdOrProof" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Request Token</button>
+    <a asp-action="Login" class="btn btn-link">Login</a>
+    <a asp-action="Register" class="btn btn-link">Register</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

@@ -1,7 +1,20 @@
+using Baynatna.Models;
+using Microsoft.EntityFrameworkCore;
+using Baynatna.Services;
+using Baynatna.Repositories;
+using Baynatna.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<BaynatnaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IVerificationTokenRepository, VerificationTokenRepository>();
+builder.Services.AddScoped<IPasswordHasher<Baynatna.Models.User>, PasswordHasher<Baynatna.Models.User>>();
 
 var app = builder.Build();
 
