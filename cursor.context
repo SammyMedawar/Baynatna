@@ -1,0 +1,250 @@
+Here is your **final, cleaned, and structured list of requirements** for the **Baynetna** project, ready to be pasted into **Cursor** as project context:
+
+---
+
+## 📌 Project Overview: Baynetna ("بينتنا")
+
+A civic reporting and discussion platform inspired by Jalajel, but with improved anonymity, moderation transparency, accessibility, and multilingual support.
+
+Framework: **.NET Core MVC**
+Design Approach: **Mobile-first**, accessible, inclusive
+
+---
+
+## ✅ Core Features
+
+### 1. 🔐 Authentication & Registration
+
+* **Login:** Username + Password only (no email required)
+* **Register:** Username + Password + Confirm Password + Token
+* CTA on registration: *"Need a token? Verify your account"*
+* Token request requires phone + email + ID or proof of residency (for immigrants in Lebanon)
+
+---
+
+### 2. 📝 Posts (Threads)
+
+* Anonymous: Only show a **thread ID** (like 4chan)
+* Fields:
+
+  * `original_body` (in any language)
+  * `translated_body` (optional, by user or moderator with "Translated by moderators" tag)
+  * Optional voice message (with captions)
+* Vote system:
+
+  * **Upvote/Downvote**, but users **must give a reason**
+  * Sort posts by:
+
+    * Date
+    * Number of likes
+    * Number of comments
+* Filter by:
+
+  * Ministry (wizara)
+  * "Quarantined" posts (moderator-deleted)
+* Pagination support
+* Search functionality
+* Up button (scroll to top)
+
+---
+
+### 3. 💬 Comments
+
+* Fields:
+
+  * `original_body` (any language)
+  * `translated_body` (optional, with same moderation tag rules)
+  * Optional voice message (with captions)
+* Comments can be:
+
+  * **Liked or disliked** (no reason required)
+  * Sorted by most liked/disliked or by date
+  * Paginated
+* Deleted comments remain visible in a collapsible section (for transparency)
+
+---
+
+### 4. 👥 Moderation
+
+* Moderators can:
+
+  * Delete posts/comments
+  * Provide translations
+  * View vote reasons
+* Deleted posts appear in **"Quarantined"** section
+
+  * Still votable
+  * If upvoted significantly, moderators get notified to consider restoring it
+
+---
+
+### 5. 📄 User Dashboard
+
+* View own posts:
+
+  * Status (active or quarantined)
+  * Score (likes/dislikes)
+* Users **cannot edit**, only **delete** their posts
+
+---
+
+## 🌍 Localization & Accessibility
+
+### Language Support
+
+* Posts/comments can be written in **any language**
+* Each post/comment has:
+
+  * `original_body`
+  * `translated_body` (optional)
+* If translated by moderators, show “Translated by Moderators” tag
+
+### Accessibility
+
+* Voice submissions with **AI-generated captions**
+* Voice-over for text (for blind users)
+* A+ / A– buttons to control font size
+
+---
+
+## 🎨 Color Blind & Theme Support
+
+### Mode Options:
+
+* **Dark Mode toggle**
+* Color themes for:
+
+  * **Deuteranopia** (Red-Green)
+  * **Protanopia** (Red blindness)
+  * **Tritanopia** (Blue-Yellow)
+  * **Achromatopsia** (Monochrome)
+
+---
+
+## 🚫 Validation & Voting Logic
+
+* Must check for **duplicate complaints**
+* Users **must enter a reason** when voting on a post
+* Future goal: Restrict voting privileges until enough participation (StackOverflow-style logic)
+
+---
+
+## 🔍 UI/UX & Design
+
+* **Mobile-first** responsive layout
+* Clear sorting/filtering
+* Pagination for both posts and comments
+* Consistent labeling for moderator actions
+* Minimalist, clear UI with toggles for accessibility settings
+
+---
+
+Let me know if you'd like this exported to Markdown, Notion, or as a project file!
+
+
+
+Database Schema:
+CREATE TABLE Users (
+    Id INT PRIMARY KEY IDENTITY,
+    Username NVARCHAR(50) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    IsModerator BIT NOT NULL DEFAULT 0,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE()
+);
+
+CREATE TABLE VerificationTokens (
+    Id INT PRIMARY KEY IDENTITY,
+    Token NVARCHAR(100) NOT NULL UNIQUE,
+    IsUsed BIT NOT NULL DEFAULT 0,
+    IssuedToUserId INT NULL, -- Optional
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (IssuedToUserId) REFERENCES Users(Id)
+);
+
+CREATE TABLE Posts (
+    Id INT PRIMARY KEY IDENTITY,
+    ThreadId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    UserId INT NOT NULL,
+    OriginalBody NVARCHAR(MAX) NOT NULL,
+    TranslatedBody NVARCHAR(MAX) NULL,
+    IsTranslatedByModerator BIT DEFAULT 0,
+    VoiceMessageUrl NVARCHAR(500) NULL,
+    IsQuarantined BIT DEFAULT 0,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
+CREATE TABLE Comments (
+    Id INT PRIMARY KEY IDENTITY,
+    PostId INT NOT NULL,
+    UserId INT NOT NULL,
+    OriginalBody NVARCHAR(MAX) NOT NULL,
+    TranslatedBody NVARCHAR(MAX) NULL,
+    IsTranslatedByModerator BIT DEFAULT 0,
+    VoiceMessageUrl NVARCHAR(500) NULL,
+    IsDeletedByModerator BIT DEFAULT 0,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (PostId) REFERENCES Posts(Id),
+    FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
+CREATE TABLE PostVotes (
+    Id INT PRIMARY KEY IDENTITY,
+    PostId INT NOT NULL,
+    UserId INT NOT NULL,
+    IsUpvote BIT NOT NULL,
+    Reason NVARCHAR(500) NOT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (PostId) REFERENCES Posts(Id),
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    CONSTRAINT UQ_PostVote UNIQUE (PostId, UserId)
+);
+
+CREATE TABLE CommentVotes (
+    Id INT PRIMARY KEY IDENTITY,
+    CommentId INT NOT NULL,
+    UserId INT NOT NULL,
+    IsUpvote BIT NOT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (CommentId) REFERENCES Comments(Id),
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    CONSTRAINT UQ_CommentVote UNIQUE (CommentId, UserId)
+);
+
+
+--Ministries/wizara
+CREATE TABLE Tags (
+    Id INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE PostTags (
+    PostId INT NOT NULL,
+    TagId INT NOT NULL,
+    PRIMARY KEY (PostId, TagId),
+    FOREIGN KEY (PostId) REFERENCES Posts(Id),
+    FOREIGN KEY (TagId) REFERENCES Tags(Id)
+);
+
+CREATE TABLE Reports (
+    Id INT PRIMARY KEY IDENTITY,
+    ReporterId INT NOT NULL,
+    PostId INT NULL,
+    CommentId INT NULL,
+    Reason NVARCHAR(500) NOT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (ReporterId) REFERENCES Users(Id),
+    FOREIGN KEY (PostId) REFERENCES Posts(Id),
+    FOREIGN KEY (CommentId) REFERENCES Comments(Id)
+);
+
+CREATE TABLE PostAuditLog (
+    Id INT PRIMARY KEY IDENTITY,
+    PostId INT NOT NULL,
+    ModeratorId INT NOT NULL,
+    Action NVARCHAR(100) NOT NULL,
+    Notes NVARCHAR(500),
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (PostId) REFERENCES Posts(Id),
+    FOREIGN KEY (ModeratorId) REFERENCES Users(Id)
+);
