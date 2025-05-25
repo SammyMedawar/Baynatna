@@ -1,0 +1,72 @@
+# Build artifacts
+bin/
+obj/
+
+# Publish folder (if you publish locally)
+**/publish/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE files
+.vscode/
+.idea/
+
+# Visual Studio
+.vs/
+
+# Rider
+*.sln.iml
+
+# Logs
+*.log
+
+# Database files (if using LocalDB or SQLite)
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Backup & temp files
+*~
+*.tmp
+*.bak
+*.old
+
+# Npm and Node.js
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# DotNet CLI
+.project/
+.*/project.lock.json
+
+# Coverage reports
+coverage/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# JetBrains Rider
+.idea/
+
+# Mac / Linux files
+.DS_Store
+*.swp
+*.swo
+
+# Publish artifacts
+publish/
+
+# Optional: Secrets if not handled properly
+secrets.json
