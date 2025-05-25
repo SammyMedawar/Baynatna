@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Baynatna.Services;
 using Baynatna.Models;
 using Baynatna.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace Baynatna.Controllers
 {
@@ -26,7 +27,12 @@ namespace Baynatna.Controllers
                 ModelState.AddModelError(string.Empty, result.ErrorMessage);
                 return View(model);
             }
-            // TODO: Set auth cookie/session
+            // Set user id in session
+            var user = result.Data as Baynatna.Models.User;
+            if (user != null)
+            {
+                HttpContext.Session.SetInt32("UserId", user.Id);
+            }
             return RedirectToAction("Index", "Home");
         }
 

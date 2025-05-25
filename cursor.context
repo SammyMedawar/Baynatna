@@ -215,7 +215,8 @@ CREATE TABLE CommentVotes (
 --Ministries/wizara
 CREATE TABLE Tags (
     Id INT PRIMARY KEY IDENTITY,
-    Name NVARCHAR(100) NOT NULL UNIQUE
+    Name NVARCHAR(100) NOT NULL UNIQUE,
+    LanguageID INT
 );
 
 CREATE TABLE PostTags (

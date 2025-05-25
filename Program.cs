@@ -14,7 +14,11 @@ builder.Services.AddDbContext<BaynatnaContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVerificationTokenRepository, VerificationTokenRepository>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPasswordHasher<Baynatna.Models.User>, PasswordHasher<Baynatna.Models.User>>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -31,6 +35,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
