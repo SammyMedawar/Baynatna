@@ -64,16 +64,20 @@
         {
             <div class="post-card-tag">@post.Tag</div>
         }
-        <div class="post-card-row">
-            <div class="post-votes">
-                <span class="post-upvotes"><span class="me-1">👍</span>+@post.Upvotes</span>
-                <span class="post-downvotes"><span class="me-1">👎</span>-@post.Downvotes</span>
-            </div>
-            <form asp-controller="Post" asp-action="Details" method="get" style="margin-left:auto;">
-                <input type="hidden" name="id" value="@post.Id" />
-                <button type="submit" class="post-details-btn">Details <span>&rarr;</span></button>
-            </form>
-        </div>
+                <div class="post-card-row">
+                    <div class="post-votes">
+                        <span class="post-upvotes" onclick="vote('upvote', @post.Id)" style="cursor:pointer;">
+                            <span class="me-1">👍</span>+@post.Upvotes
+                        </span>
+                        <span class="post-downvotes ms-2" onclick="vote('downvote', @post.Id)" style="cursor:pointer;">
+                            <span class="me-1">👎</span>-@post.Downvotes
+                        </span>
+                    </div>
+                    <form asp-controller="Post" asp-action="Details" method="get" style="margin-left:auto;">
+                        <input type="hidden" name="id" value="@post.Id" />
+                        <button type="submit" class="post-details-btn">Details <span>&rarr;</span></button>
+                    </form>
+                </div>
     </div>
 }
 </div>
@@ -91,4 +95,69 @@
     </form>
 }
 </div>
-</div> 
+<!-- Voting Modal -->
+@if (!string.IsNullOrEmpty(Context.Request.Query["action"]) && !string.IsNullOrEmpty(Context.Request.Query["id"]))
+{
+    var voteAction = Context.Request.Query["action"].ToString();
+    var voteId = Context.Request.Query["id"].ToString();
+    <div class="modal fade show" id="voteModal" tabindex="-1" style="display:block; background:rgba(0,0,0,0.5);" aria-modal="true" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{(voteAction == "upvote" ? "Upvote" : "Downvote")} Post</h5>
+            <button type="button" class="btn-close" onclick="window.location='@Url.Action("Index", "Post")'"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-center mb-3">
+                <span class="fs-2 me-3 @(voteAction=="upvote" ? "text-success" : "text-muted")">👍</span>
+                <span class="fs-2 ms-3 @(voteAction=="downvote" ? "text-danger" : "text-muted")">👎</span>
+            </div>
+            <form id="voteForm">
+                <input type="hidden" name="PostId" value="@voteId" />
+                <input type="hidden" name="IsUpvote" value="@(voteAction=="upvote" ? "true" : "false")" />
+                <div class="mb-3">
+                    <label for="voteReason" class="form-label">Reason <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="voteReason" name="Reason" required></textarea>
+                </div>
+            </form>
+            <div id="voteError" class="text-danger"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="window.location='@Url.Action("Index", "Post")'">Cancel</button>
+            <button type="button" class="btn btn-primary" id="submitVoteBtn">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+    $(function() {
+        $('#submitVoteBtn').on('click', function() {
+            var reason = $('#voteReason').val().trim();
+            if (!reason) {
+                $('#voteError').text('Reason is required.');
+                return;
+            }
+            var data = $('#voteForm').serialize();
+            $.post('@Url.Action("Vote", "Post")', data)
+                .done(function(res) {
+                    if (res.success) {
+                        window.location = '@Url.Action("Index", "Post")';
+                    } else {
+                        $('#voteError').text(res.error || 'An error occurred.');
+                    }
+                })
+                .fail(function() {
+                    $('#voteError').text('An error occurred.');
+                });
+        });
+    });
+    </script>
+}
+</div>
+</div>
+
+<script>
+    function vote(action, postId) {
+        window.location.href = `?action=${action}&id=${postId}`;
+    }
+</script>

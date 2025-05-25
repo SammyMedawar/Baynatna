@@ -59,5 +59,42 @@ namespace Baynatna.Controllers
             ViewBag.Query = query;
             return View(postsResult);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Vote(int postId, bool isUpvote, string reason)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return Json(new { success = false, error = "You must be logged in to vote." });
+            var result = await _postService.VoteAsync(userId.Value, postId, isUpvote, reason);
+            if (result.Success)
+                return Json(new { success = true });
+            return Json(new { success = false, error = result.ErrorMessage });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var post = await _postService.GetPostDetailsAsync(id, userId);
+            if (post == null)
+                return NotFound();
+            return View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "User");
+            var result = await _postService.DeletePostAsync(id, userId.Value);
+            if (!result.Success)
+            {
+                TempData["Error"] = result.ErrorMessage;
+                return RedirectToAction("Details", new { id });
+            }
+            return RedirectToAction("Index");
+        }
     }
 } 

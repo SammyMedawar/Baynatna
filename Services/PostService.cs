@@ -106,5 +106,87 @@ namespace Baynatna.Services
             var tags = await _tagRepository.GetAllAsync();
             return tags.Select(t => new TagViewModel { Id = t.Id, Name = t.Name }).ToList();
         }
+
+        public async Task<ServiceResult> VoteAsync(int userId, int postId, bool isUpvote, string reason)
+        {
+            // Check if post exists
+            var post = (await _postRepository.GetAllAsync()).FirstOrDefault(p => p.Id == postId);
+            if (post == null)
+                return new ServiceResult { Success = false, ErrorMessage = "Post not found." };
+            // Cannot vote on own post
+            if (post.UserId == userId)
+                return new ServiceResult { Success = false, ErrorMessage = "You cannot vote on your own post." };
+            // Check for existing vote
+            if (post.PostVotes != null && post.PostVotes.Any(v => v.UserId == userId))
+                return new ServiceResult { Success = false, ErrorMessage = "You have already voted on this post." };
+            // Reason required
+            if (string.IsNullOrWhiteSpace(reason))
+                return new ServiceResult { Success = false, ErrorMessage = "Reason is required." };
+            // Add vote
+            var vote = new PostVote
+            {
+                PostId = postId,
+                UserId = userId,
+                IsUpvote = isUpvote,
+                Reason = reason,
+                CreatedAt = DateTime.UtcNow
+            };
+            post.PostVotes = post.PostVotes ?? new List<PostVote>();
+            post.PostVotes.Add(vote);
+            _postRepository.Update(post);
+            await _postRepository.SaveChangesAsync();
+            return new ServiceResult { Success = true };
+        }
+
+        public async Task<PostDetailsViewModel?> GetPostDetailsAsync(int postId, int? userId)
+        {
+            var post = (await _postRepository.GetAllAsync()).FirstOrDefault(p => p.Id == postId);
+            if (post == null) return null;
+            return new PostDetailsViewModel
+            {
+                Id = post.Id,
+                Title = post.OriginalTitle,
+                TranslatedTitle = post.TranslatedTitle,
+                Body = post.OriginalBody,
+                TranslatedBody = post.TranslatedBody,
+                IsTranslatedByModerator = post.IsTranslatedByModerator,
+                Tag = post.PostTags != null && post.PostTags.Any() ? post.PostTags.First().Tag.Name : null,
+                CreatedAt = post.CreatedAt,
+                IsOwner = userId.HasValue && post.UserId == userId.Value,
+                IsQuarantined = post.IsQuarantined
+            };
+        }
+
+        public async Task<ServiceResult> DeletePostAsync(int postId, int userId)
+        {
+            var post = (await _postRepository.GetAllAsync()).FirstOrDefault(p => p.Id == postId);
+            if (post == null)
+                return new ServiceResult { Success = false, ErrorMessage = "Post not found." };
+            if (post.UserId != userId)
+                return new ServiceResult { Success = false, ErrorMessage = "You are not authorized to delete this post." };
+            _postRepository.Delete(post);
+            await _postRepository.SaveChangesAsync();
+            return new ServiceResult { Success = true };
+        }
+
+        Task<ServiceResult> IPostService.AddCommentAsync(int userId, AddCommentViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult> IPostService.DeleteCommentAsync(int commentId, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ServiceResult> IPostService.VoteCommentAsync(int userId, int commentId, bool isUpvote)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<CommentViewModel>> IPostService.GetCommentsAsync(int postId, int? userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 } 
