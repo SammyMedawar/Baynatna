@@ -34,6 +34,134 @@
     --btn-hover-color: #66b3ff;
 }
 
+[data-theme="protanopia-light"] {
+    /* Protanopia (red-blind) light mode - uses blues and yellows with high contrast */
+    --bg-color: #f0f8ff;
+    --text-color: #003366;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 16px rgba(0,51,102,0.15);
+    --border-color: #4169e1;
+    --link-color: #0000cd;
+    --tag-bg: #ffd700;
+    --tag-text: #000080;
+    --navbar-bg: #e6f3ff;
+    --footer-bg: #191970;
+    --footer-text: #ffffff;
+    --btn-hover-color: #4169e1;
+}
+
+[data-theme="protanopia-dark"] {
+    /* Protanopia (red-blind) dark mode */
+    --bg-color: #001122;
+    --text-color: #87ceeb;
+    --card-bg: #003366;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    --border-color: #4682b4;
+    --link-color: #87cefa;
+    --tag-bg: #b8860b;
+    --tag-text: #000000;
+    --navbar-bg: #002244;
+    --footer-bg: #000011;
+    --footer-text: #add8e6;
+    --btn-hover-color: #87ceeb;
+}
+
+[data-theme="deuteranopia-light"] {
+    /* Deuteranopia (green-blind) light mode - uses purples and oranges */
+    --bg-color: #faf0ff;
+    --text-color: #4b0082;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 16px rgba(75,0,130,0.15);
+    --border-color: #9370db;
+    --link-color: #8a2be2;
+    --tag-bg: #ff8c00;
+    --tag-text: #4b0082;
+    --navbar-bg: #f0e6ff;
+    --footer-bg: #663399;
+    --footer-text: #ffffff;
+    --btn-hover-color: #9370db;
+}
+
+[data-theme="deuteranopia-dark"] {
+    /* Deuteranopia (green-blind) dark mode */
+    --bg-color: #1a0d26;
+    --text-color: #dda0dd;
+    --card-bg: #2d1b3d;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    --border-color: #8b7ab8;
+    --link-color: #da70d6;
+    --tag-bg: #cd853f;
+    --tag-text: #000000;
+    --navbar-bg: #221133;
+    --footer-bg: #0d0613;
+    --footer-text: #e6e6fa;
+    --btn-hover-color: #dda0dd;
+}
+
+[data-theme="tritanopia-light"] {
+    /* Tritanopia (blue-blind) light mode - uses bright reds and greens */
+    --bg-color: #fff5f5;
+    --text-color: #8b0000;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 16px rgba(139,0,0,0.15);
+    --border-color: #dc143c;
+    --link-color: #b22222;
+    --tag-bg: #32cd32;
+    --tag-text: #8b0000;
+    --navbar-bg: #ffe6e6;
+    --footer-bg: #8b0000;
+    --footer-text: #ffffff;
+    --btn-hover-color: #dc143c;
+}
+
+[data-theme="tritanopia-dark"] {
+    /* Tritanopia (blue-blind) dark mode */
+    --bg-color: #1a0808;
+    --text-color: #ffb6c1;
+    --card-bg: #330808;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    --border-color: #cd5c5c;
+    --link-color: #ff69b4;
+    --tag-bg: #228b22;
+    --tag-text: #000000;
+    --navbar-bg: #220808;
+    --footer-bg: #0d0303;
+    --footer-text: #ffc0cb;
+    --btn-hover-color: #ffb6c1;
+}
+
+[data-theme="achromatopsia-light"] {
+    /* Achromatopsia (complete color blindness) light mode - high contrast grayscale */
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --card-bg: #f8f8f8;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    --border-color: #808080;
+    --link-color: #404040;
+    --tag-bg: #d3d3d3;
+    --tag-text: #000000;
+    --navbar-bg: #f0f0f0;
+    --footer-bg: #2f2f2f;
+    --footer-text: #ffffff;
+    --btn-hover-color: #606060;
+}
+
+[data-theme="achromatopsia-dark"] {
+    /* Achromatopsia (complete color blindness) dark mode - high contrast grayscale */
+    --bg-color: #0a0a0a;
+    --text-color: #f0f0f0;
+    --card-bg: #1f1f1f;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    --border-color: #606060;
+    --link-color: #c0c0c0;
+    --tag-bg: #505050;
+    --tag-text: #000000;
+    --navbar-bg: #151515;
+    --footer-bg: #050505;
+    --footer-text: #e0e0e0;
+    --btn-hover-color: #a0a0a0;
+}
+
 /* Apply variables to html and body */
 html {
     background-color: var(--bg-color);
@@ -256,4 +384,185 @@ a {
 .text-muted {
     color: var(--text-color) !important;
     opacity: 0.7;
+}
+
+/* Theme selection popup styles */
+.theme-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-popup {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+}
+
+.theme-popup h3 {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.theme-popup p {
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.theme-option {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.theme-option:hover {
+    border-color: var(--link-color);
+    background: var(--link-color);
+    color: var(--bg-color);
+}
+
+.theme-option.selected {
+    border-color: var(--link-color);
+    background: var(--link-color);
+    color: var(--bg-color);
+}
+
+.theme-popup-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.theme-popup-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.theme-popup-btn.primary {
+    background: var(--link-color);
+    color: var(--bg-color);
+}
+
+.theme-popup-btn.secondary {
+    background: var(--border-color);
+    color: var(--text-color);
+}
+
+.theme-popup-btn:hover {
+    opacity: 0.8;
+}
+
+/* Theme selector dropdown */
+.theme-selector {
+    background: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.theme-selector:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--link-color), 0.25) !important;
+    background: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.theme-selector option {
+    background: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Ensure all card text is properly colored */
+.post-card * {
+    color: var(--text-color) !important;
+}
+
+.post-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: var(--text-color) !important;
+}
+
+.post-card .vote-count {
+    color: var(--text-color) !important;
+}
+
+.post-card .post-upvotes,
+.post-card .post-downvotes {
+    color: var(--text-color) !important;
+}
+
+.post-card .post-details-btn {
+    color: var(--link-color) !important;
+}
+
+.post-card .post-details-link {
+    color: var(--link-color) !important;
+}
+
+/* Fix form controls in all themes */
+.form-control,
+.form-select {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--card-bg) !important;
+    border-color: var(--link-color) !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--link-color), 0.25) !important;
+}
+
+.form-control::placeholder {
+    color: var(--text-color) !important;
+    opacity: 0.6;
+}
+
+/* Ensure buttons maintain proper colors */
+.btn-primary {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    color: var(--bg-color) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-hover-color) !important;
+    border-color: var(--btn-hover-color) !important;
+    color: var(--bg-color) !important;
 }
