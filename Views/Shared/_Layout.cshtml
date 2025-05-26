@@ -54,7 +54,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-turquoise header-padding">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.png" alt="Baynatna Logo" style="height:35px;">
+                    <img id="theme-logo" src="~/images/logo.png" alt="Baynatna Logo" style="height:35px;">
                 </a>
                 <div class="d-flex align-items-center ms-auto">
                     <select id="theme-selector" class="theme-selector me-2" title="Select theme">
@@ -147,6 +147,30 @@
                 });
             } else {
                 console.log('Theme selector NOT found in inline script');
+            }
+        });
+    </script>
+    <script>
+        function updateLogo(theme) {
+            const logo = document.getElementById('theme-logo');
+            if (!logo) return;
+
+            if (theme.includes('dark')) {
+                logo.src = '/images/logo_dark.png';
+            } else {
+                logo.src = '/images/logo.png';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            updateLogo(currentTheme);
+
+            const selector = document.getElementById('theme-selector');
+            if (selector) {
+                selector.addEventListener('change', function () {
+                    updateLogo(this.value);
+                });
             }
         });
     </script>
