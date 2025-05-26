@@ -22,9 +22,15 @@
         
         <div class="mb-3">
             <label asp-for="Password" class="form-label">Password</label>
-            <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+            <div class="input-group">
+                <input asp-for="Password" class="form-control" id="passwordInput" placeholder="Enter your password" />
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword" aria-label="Toggle password visibility">
+                    <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+                </button>
+            </div>
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
+
         
         <button type="submit" class="btn btn-primary">Sign In</button>
         
@@ -37,4 +43,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/login.js"></script>
 } 
