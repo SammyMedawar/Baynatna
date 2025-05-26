@@ -1,0 +1,44 @@
+.lang-btn {
+    margin: 0 10px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.lang-btn:hover {
+    transform: scale(1.05);
+
+}
+
+.privacy-content {
+    margin-top: 5px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.language-switcher {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.privacy-content h3 {
+    margin-top: 20px;
+    color: #333;
+}
+
+.privacy-content p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+#ar {
+    direction: rtl;
+    text-align: right;
+}
