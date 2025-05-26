@@ -1,23 +1,5 @@
 /* terms.css */
 
-/* Style the hero banner */
-.hero-banner {
-    background-color: #f8f9fa;
-    padding: 60px 20px;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-    .hero-banner h1 {
-        font-size: 3rem;
-        margin-bottom: 20px;
-    }
-
-    .hero-banner p {
-        font-size: 1.25rem;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
 /* Language switcher buttons */
 .language-switcher .lang-btn {
     margin: 0 10px;
@@ -26,6 +8,10 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.lang-btn:hover {
+    transform: scale(1.05);
 }
 
 .language-switcher {
@@ -44,7 +30,7 @@
 }
 
     .terms-content h3 {
-        margin-top: 30px;
+        margin-top: 1px;
         color: #333;
     }
 
