@@ -2,33 +2,50 @@
 @{
     ViewData["Title"] = "Register";
 }
-<h2>Register</h2>
-<form asp-action="Register" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="Username" class="form-label"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<link rel="stylesheet" href="~/css/account.css" />
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Create Account</h2>
+        <p>Join Baynatna to start reporting issues</p>
     </div>
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="ConfirmPassword" class="form-label"></label>
-        <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Token" class="form-label"></label>
-        <input asp-for="Token" class="form-control" />
-        <span asp-validation-for="Token" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Register</button>
-    <a asp-action="Login" class="btn btn-link">Login</a>
-    <a asp-action="TokenRequest" class="btn btn-link">Need a token?</a>
-</form>
+    
+    <form asp-action="Register" method="post" class="auth-form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label">Username</label>
+            <input asp-for="Username" class="form-control" placeholder="Choose a username" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" class="form-control" placeholder="Create a password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm your password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Token" class="form-label">Verification Token</label>
+            <input asp-for="Token" class="form-control" placeholder="Enter your verification token" />
+            <span asp-validation-for="Token" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Create Account</button>
+        
+        <div class="auth-links">
+            <a asp-action="Login" class="btn btn-link">Already have an account?</a>
+            <a asp-action="TokenRequest" class="btn btn-link">Need a token?</a>
+        </div>
+    </form>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 } 
