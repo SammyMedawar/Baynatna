@@ -66,3 +66,20 @@
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
     transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
+.home-option:hover .underline {
+    text-decoration: underline;
+    text-decoration-thickness: 1px; 
+    text-underline-offset: 4px; 
+}
+
+.home-option span {
+    color: rgb(13, 110, 253);
+    font-weight: bold;
+    text-shadow: -0.3px -0.3px 0 rgba(0, 0, 0, 0.3), 0.3px -0.3px 0 rgba(0, 0, 0, 0.3), -0.3px 0.3px 0 rgba(0, 0, 0, 0.3), 0.3px 0.3px 0 rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+
+

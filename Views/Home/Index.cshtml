@@ -11,24 +11,24 @@
 <div class="home-options">
     <a class="home-option complaints" asp-controller="Post" asp-action="Index">
         <span class="home-option-icon">📝</span>
-        <span>Complaints</span>
+        <span class="underline">Complaints</span>
     </a>
     <a class="home-option my-complaints" href="#">
         <span class="home-option-icon">👤</span>
-        <span>My Complaints</span>
+        <span class="underline">My Complaints</span>
     </a>
     @if (isLoggedIn)
     {
         <a class="home-option logout" asp-controller="User" asp-action="Logout">
             <span class="home-option-icon">🚪</span>
-            <span>Logout</span>
+            <span class="underline">Logout</span>
         </a>
     }
     else
     {
         <a class="home-option login" asp-controller="User" asp-action="Login">
             <span class="home-option-icon">🔑</span>
-            <span>Login</span>
+            <span class="underline">Login</span>
         </a>
     }
 </div>
