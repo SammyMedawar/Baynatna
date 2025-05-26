@@ -1,3 +1,50 @@
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+:root {
+    /* Light mode variables */
+    --bg-color: #fff;
+    --text-color: #111;
+    --card-bg: #fff;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    --border-color: #e5e5e5;
+    --link-color: #0d6efd;
+    --tag-bg: #3ad5d7;
+    --tag-text: #111;
+    --navbar-bg: #fff;
+    --footer-bg: #27242d;
+    --footer-text: #fff;
+    --btn-hover-color: #3ad5d7;
+}
+
+[data-theme="dark"] {
+    /* Dark mode variables */
+    --bg-color: #1a1a1a;
+    --text-color: #f5f5f5;
+    --card-bg: #2d2d2d;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    --border-color: #404040;
+    --link-color: #66b3ff;
+    --tag-bg: #2a9d9f;
+    --tag-text: #fff;
+    --navbar-bg: #2d2d2d;
+    --footer-bg: #1a1a1a;
+    --footer-text: #ccc;
+    --btn-hover-color: #66b3ff;
+}
+
+/* Apply variables to html and body */
+html {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+
 /* Common styles for Baynatna */
 .posts-grid {
     display: grid;
@@ -15,25 +62,26 @@
     }
 }
 .post-card {
-    background: #fff;
+    background: var(--card-bg) !important;
     border-radius: 1rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow: var(--card-shadow) !important;
     padding: 1.5rem 1.25rem 1.25rem 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    border: 1px solid var(--border-color) !important;
 }
 .post-card-title {
     font-size: 1.1rem;
     font-weight: bold;
     margin-bottom: 0.25rem;
-    color: #222;
+    color: var(--text-color) !important;
 }
 .post-card-tag {
     display: flex;
     align-items: center;
-    background: #3ad5d7;
-    color: #111;
+    background: var(--tag-bg) !important;
+    color: var(--tag-text) !important;
     font-weight: normal;
     border-radius: 0.5rem;
     padding: 0.2rem 0.75rem;
@@ -76,7 +124,7 @@
 }
 .post-details-btn {
     background: transparent;
-    color: #3ad5d7;
+    color: var(--link-color) !important;
     border: none;
     font-weight: bold;
     font-size: 1rem;
@@ -87,14 +135,21 @@
     transition: color 0.2s;
 }
 .post-details-btn:hover, .post-details-btn:focus {
-    color: #111;
+    color: var(--text-color) !important;
     background: transparent;
     border: none;
 }
+.post-details-link {
+    color: var(--link-color) !important;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 .load-more-btn {
-    background: #3ad5d7;
-    color: #111;
-    border: 1.5px solid #3ad5d7;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    border: 1.5px solid var(--tag-bg);
     font-weight: bold;
     padding: 0.7rem 2.5rem;
     border-radius: 2rem;
@@ -103,29 +158,29 @@
     transition: background 0.2s, color 0.2s, border 0.2s;
 }
 .load-more-btn:hover, .load-more-btn:focus {
-    background: #111;
-    color: #fff;
-    border: 1.5px solid #111;
+    background: var(--text-color);
+    color: var(--bg-color);
+    border: 1.5px solid var(--text-color);
 }
 .navbar-turquoise {
-    background: #fff !important;
-    color: #111 !important;
-    border-bottom: none !important;
+    background: var(--navbar-bg) !important;
+    color: var(--text-color) !important;
+    border-bottom: 1px solid var(--border-color) !important;
     box-shadow: none !important;
     padding-left: 2rem;
     padding-right: 2rem;
 }
 .footer-turquoise {
-    background: #27242d;
-    color: #fff !important;
+    background: var(--footer-bg) !important;
+    color: var(--footer-text) !important;
     text-align: center;
 }
 .navbar-turquoise .navbar-brand, .navbar-turquoise .btn, .navbar-turquoise .nav-link {
-    color: #111 !important;
+    color: var(--text-color) !important;
 }
 .btn-header {
     background: transparent !important;
-    color: #111 !important;
+    color: var(--text-color) !important;
     border: none !important;
     box-shadow: none !important;
     font-weight: bold !important;
@@ -133,7 +188,7 @@
 }
 .btn-header:hover, .btn-header:focus {
     background: transparent !important;
-    color: #3ad5d7 !important;
+    color: var(--btn-hover-color) !important;
     border: none !important;
 }
 .vote-selected {
@@ -144,4 +199,61 @@
 .vote-selected.down {
     border-color: #dc2626 !important;
     background-color: #fee2e2 !important;
+}
+
+.card {
+    background: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.form-control {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.form-control:focus {
+    background-color: var(--card-bg) !important;
+    border-color: var(--link-color) !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--link-color), 0.25) !important;
+}
+
+.form-select {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.modal-content {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color) !important;
+}
+
+.modal-footer {
+    border-top-color: var(--border-color) !important;
+}
+
+/* Additional elements that need theming */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color) !important;
+}
+
+a {
+    color: var(--link-color) !important;
+}
+
+.container {
+    color: var(--text-color);
+}
+
+.text-muted {
+    color: var(--text-color) !important;
+    opacity: 0.7;
 }
