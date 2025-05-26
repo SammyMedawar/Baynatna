@@ -13,10 +13,14 @@ namespace Baynatna.Services
     {
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
-        public PostService(IPostRepository postRepository, ITagRepository tagRepository)
+        private readonly ICommentRepository _commentRepository;
+        private readonly ICommentVoteRepository _commentVoteRepository;
+        public PostService(IPostRepository postRepository, ITagRepository tagRepository, ICommentRepository commentRepository, ICommentVoteRepository commentVoteRepository)
         {
             _postRepository = postRepository;
             _tagRepository = tagRepository;
+            _commentRepository = commentRepository;
+            _commentVoteRepository = commentVoteRepository;
         }
 
         public async Task<ServiceResult> CreatePostAsync(int userId, CreatePostViewModel model)
@@ -142,6 +146,15 @@ namespace Baynatna.Services
         {
             var post = (await _postRepository.GetAllAsync()).FirstOrDefault(p => p.Id == postId);
             if (post == null) return null;
+            var comments = await GetCommentsAsync(postId, userId);
+            var upvotes = post.PostVotes?.Count(v => v.IsUpvote) ?? 0;
+            var downvotes = post.PostVotes?.Count(v => !v.IsUpvote) ?? 0;
+            bool? userVote = null;
+            if (userId.HasValue && post.PostVotes != null)
+            {
+                var vote = post.PostVotes.FirstOrDefault(v => v.UserId == userId.Value);
+                if (vote != null) userVote = vote.IsUpvote;
+            }
             return new PostDetailsViewModel
             {
                 Id = post.Id,
@@ -153,7 +166,12 @@ namespace Baynatna.Services
                 Tag = post.PostTags != null && post.PostTags.Any() ? post.PostTags.First().Tag.Name : null,
                 CreatedAt = post.CreatedAt,
                 IsOwner = userId.HasValue && post.UserId == userId.Value,
-                IsQuarantined = post.IsQuarantined
+                IsQuarantined = post.IsQuarantined,
+                Comments = comments,
+                NewComment = new AddCommentViewModel { PostId = postId },
+                Upvotes = upvotes,
+                Downvotes = downvotes,
+                UserVote = userVote
             };
         }
 
@@ -169,24 +187,131 @@ namespace Baynatna.Services
             return new ServiceResult { Success = true };
         }
 
-        Task<ServiceResult> IPostService.AddCommentAsync(int userId, AddCommentViewModel model)
+        public async Task<ServiceResult> AddCommentAsync(int userId, AddCommentViewModel model)
         {
-            throw new NotImplementedException();
+            // Check if post exists
+            var post = (await _postRepository.GetAllAsync()).FirstOrDefault(p => p.Id == model.PostId);
+            if (post == null)
+                return new ServiceResult { Success = false, ErrorMessage = "Post not found." };
+            if (string.IsNullOrEmpty(model.VoteAction))
+                return new ServiceResult { Success = false, ErrorMessage = "Upvote or downvote is required." };
+
+            // Check if user has already voted on this post
+            if (post.PostVotes != null && post.PostVotes.Any(v => v.UserId == userId))
+                return new ServiceResult { Success = false, ErrorMessage = "You have already voted on this post." };
+
+            // Add the comment
+            var comment = new Comment
+            {
+                PostId = model.PostId,
+                UserId = userId,
+                OriginalBody = model.Body,
+                TranslatedBody = model.TranslatedBody,
+                VoiceMessageUrl = model.VoiceMessageUrl,
+                IsTranslatedByModerator = false,
+                IsDeletedByModerator = false,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _commentRepository.AddAsync(comment);
+            await _commentRepository.SaveChangesAsync();
+
+            // Add the post vote
+            bool isUpvote = model.VoteAction.ToLower() == "upvote";
+            var postVote = new PostVote
+            {
+                PostId = model.PostId,
+                UserId = userId,
+                IsUpvote = isUpvote,
+                Reason = $"Vote added with comment #{comment.Id}",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            post.PostVotes = post.PostVotes ?? new List<PostVote>();
+            post.PostVotes.Add(postVote);
+            _postRepository.Update(post);
+            await _postRepository.SaveChangesAsync();
+
+            return new ServiceResult { Success = true };
         }
 
-        Task<ServiceResult> IPostService.DeleteCommentAsync(int commentId, int userId)
+        public async Task<ServiceResult> DeleteCommentAsync(int commentId, int userId)
         {
-            throw new NotImplementedException();
+            var comment = (await _commentRepository.GetAllAsync()).FirstOrDefault(c => c.Id == commentId);
+            if (comment == null)
+                return new ServiceResult { Success = false, ErrorMessage = "Comment not found." };
+            if (comment.UserId != userId)
+                return new ServiceResult { Success = false, ErrorMessage = "You are not authorized to delete this comment." };
+
+            // Get the post to remove associated post vote
+            var post = (await _postRepository.GetAllAsync()).FirstOrDefault(p => p.Id == comment.PostId);
+            if (post?.PostVotes != null)
+            {
+                var postVote = post.PostVotes.FirstOrDefault(v => v.UserId == userId);
+                if (postVote != null)
+                {
+                    post.PostVotes.Remove(postVote);
+                    _postRepository.Update(post);
+                }
+            }
+
+            // Remove any comment votes
+            var commentVotes = (await _commentVoteRepository.GetAllAsync()).Where(v => v.CommentId == commentId);
+            foreach (var vote in commentVotes)
+            {
+                _commentVoteRepository.Delete(vote);
+            }
+
+            // Delete the comment
+            _commentRepository.Delete(comment);
+
+            // Save all changes
+            await _postRepository.SaveChangesAsync();
+            await _commentRepository.SaveChangesAsync();
+            await _commentVoteRepository.SaveChangesAsync();
+
+            return new ServiceResult { Success = true };
         }
 
-        Task<ServiceResult> IPostService.VoteCommentAsync(int userId, int commentId, bool isUpvote)
+        public async Task<ServiceResult> VoteCommentAsync(int userId, int commentId, bool isUpvote)
         {
-            throw new NotImplementedException();
+            var comment = (await _commentRepository.GetAllAsync()).FirstOrDefault(c => c.Id == commentId);
+            if (comment == null)
+                return new ServiceResult { Success = false, ErrorMessage = "Comment not found." };
+            if (comment.UserId == userId)
+                return new ServiceResult { Success = false, ErrorMessage = "You cannot vote on your own comment." };
+            var existingVote = (await _commentVoteRepository.GetAllAsync()).FirstOrDefault(v => v.CommentId == commentId && v.UserId == userId);
+            if (existingVote != null)
+                return new ServiceResult { Success = false, ErrorMessage = "You have already voted on this comment." };
+            var vote = new CommentVote
+            {
+                CommentId = commentId,
+                UserId = userId,
+                IsUpvote = isUpvote,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _commentVoteRepository.AddAsync(vote);
+            await _commentVoteRepository.SaveChangesAsync();
+            return new ServiceResult { Success = true };
         }
 
-        Task<List<CommentViewModel>> IPostService.GetCommentsAsync(int postId, int? userId)
+        public async Task<List<CommentViewModel>> GetCommentsAsync(int postId, int? userId)
         {
-            throw new NotImplementedException();
+            var comments = (await _commentRepository.GetAllAsync()).Where(c => c.PostId == postId).ToList();
+            var votes = await _commentVoteRepository.GetAllAsync();
+            return comments.Select(c => new CommentViewModel
+            {
+                Id = c.Id,
+                PostId = c.PostId,
+                UserId = c.UserId,
+                Body = c.OriginalBody,
+                TranslatedBody = c.TranslatedBody,
+                CreatedAt = c.CreatedAt,
+                IsOwner = userId.HasValue && c.UserId == userId.Value,
+                Upvotes = votes.Count(v => v.CommentId == c.Id && v.IsUpvote),
+                Downvotes = votes.Count(v => v.CommentId == c.Id && !v.IsUpvote),
+                CanVote = userId.HasValue && c.UserId != userId.Value && !votes.Any(v => v.CommentId == c.Id && v.UserId == userId.Value),
+                CanDelete = userId.HasValue && c.UserId == userId.Value
+            }).ToList();
         }
     }
 } 

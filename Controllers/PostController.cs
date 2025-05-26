@@ -96,5 +96,55 @@ namespace Baynatna.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(AddCommentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please fill in all required fields.";
+                return RedirectToAction("Details", new { id = model.PostId, action = model.VoteAction });
+            }
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "User");
+
+            // Additional validation
+            if (string.IsNullOrWhiteSpace(model.Body?.Trim()))
+            {
+                TempData["Error"] = "Comment text is required.";
+                return RedirectToAction("Details", new { id = model.PostId, action = model.VoteAction });
+            }
+
+            if (string.IsNullOrWhiteSpace(model.VoteAction))
+            {
+                TempData["Error"] = "Please select upvote or downvote.";
+                return RedirectToAction("Details", new { id = model.PostId });
+            }
+
+            var result = await _postService.AddCommentAsync(userId.Value, model);
+            if (!result.Success)
+            {
+                TempData["Error"] = result.ErrorMessage;
+                return RedirectToAction("Details", new { id = model.PostId, action = model.VoteAction });
+            }
+
+            return RedirectToAction("Details", new { id = model.PostId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(int id, int postId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "User");
+            var result = await _postService.DeleteCommentAsync(id, userId.Value);
+            if (!result.Success)
+            {
+                TempData["Error"] = result.ErrorMessage;
+            }
+            return RedirectToAction("Details", new { id = postId });
+        }
     }
 } 

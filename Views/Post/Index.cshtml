@@ -1,163 +1,232 @@
 @model Baynatna.ViewModels.PostListResult
+@using Baynatna.ViewModels
 @{
     ViewData["Title"] = "Posts";
     var tags = ViewBag.Tags as List<Baynatna.ViewModels.TagViewModel>;
     var query = ViewBag.Query as Baynatna.ViewModels.PostListQuery;
 }
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="~/css/common.css" />
 <link rel="stylesheet" href="~/css/posts.css" />
 <div class="header-padding">
-<form method="get" class="posts-toolbar" id="postsFilterForm">
-    <input type="text" name="Search" class="form-control" placeholder="Search posts..." value="@query?.Search" />
-    <select name="TagId" class="form-select">
-        <option value="">All Ministries</option>
-        @if (tags != null)
-        {
-            foreach (var tag in tags)
-            {
-                <!option value="@tag.Id" @(query?.TagId == tag.Id ? "selected" : null)>@tag.Name</!option>
-            }
-        }
-    </select>
-    <select name="SortBy" class="form-select">
-        <!option value="date" @(query?.SortBy == "date" ? "selected" : null)>Sort by Date</!option>
-        <!option value="likes" @(query?.SortBy == "likes" ? "selected" : null)>Sort by Likes</!option>
-    </select>
-    <select name="SortDir" class="form-select">
-        <!option value="desc" @(query?.SortDir == "desc" ? "selected" : null)>Desc</!option>
-        <!option value="asc" @(query?.SortDir == "asc" ? "selected" : null)>Asc</!option>
-    </select>
-    <button type="button" class="btn btn-adv" data-bs-toggle="modal" data-bs-target="#advFilterModal">Advanced Filters</button>
-    <button type="submit" class="btn btn-primary d-none">Apply</button>
-</form>
-<!-- Advanced Filters Modal -->
-<div class="modal fade" id="advFilterModal" tabindex="-1" aria-labelledby="advFilterModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="advFilterModalLabel">Advanced Filters</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-            <label for="DateFrom" class="form-label">Date From</label>
-            <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@(query?.DateFrom?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
-        </div>
-        <div class="mb-3">
-            <label for="DateTo" class="form-label">Date To</label>
-            <input type="date" class="form-control" id="DateTo" name="DateTo" value="@(query?.DateTo?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-adv" form="postsFilterForm">Apply Filters</button>
-      </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Posts</h2>
+        <a href="@Url.Action("Create", "Post")" class="btn btn-primary">Create Post</a>
     </div>
-  </div>
-</div>
-<div class="posts-grid">
-@foreach (var post in Model.Posts)
-{
-    <div class="post-card">
-        <div class="post-card-title">@post.Title</div>
-        @if (!string.IsNullOrWhiteSpace(post.Tag))
-        {
-            <div class="post-card-tag">@post.Tag</div>
-        }
-                <div class="post-card-row">
-                    <div class="post-votes">
-                        <span class="post-upvotes" onclick="vote('upvote', @post.Id)" style="cursor:pointer;">
-                            <span class="me-1">👍</span>+@post.Upvotes
-                        </span>
-                        <span class="post-downvotes ms-2" onclick="vote('downvote', @post.Id)" style="cursor:pointer;">
-                            <span class="me-1">👎</span>-@post.Downvotes
-                        </span>
-                    </div>
-                    <form asp-controller="Post" asp-action="Details" method="get" style="margin-left:auto;">
-                        <input type="hidden" name="id" value="@post.Id" />
-                        <button type="submit" class="post-details-btn">Details <span>&rarr;</span></button>
-                    </form>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3" id="postsFilterForm">
+                <div class="col-md-4">
+                    <label class="form-label">Search</label>
+                    <input type="text" name="Search" class="form-control" placeholder="Search posts..." value="@query?.Search" />
                 </div>
-    </div>
-}
-</div>
-@if (Model.HasMore)
-{
-    <form method="get" class="text-center">
-        <input type="hidden" name="Search" value="@query?.Search" />
-        <input type="hidden" name="TagId" value="@query?.TagId" />
-        <input type="hidden" name="SortBy" value="@query?.SortBy" />
-        <input type="hidden" name="SortDir" value="@query?.SortDir" />
-        <input type="hidden" name="DateFrom" value="@query?.DateFrom?.ToString("yyyy-MM-dd")" />
-        <input type="hidden" name="DateTo" value="@query?.DateTo?.ToString("yyyy-MM-dd")" />
-        <input type="hidden" name="Page" value="@(query?.Page + 1 ?? 2)" />
-        <button type="submit" class="load-more-btn">Load More</button>
-    </form>
-}
-</div>
-<!-- Voting Modal -->
-@if (!string.IsNullOrEmpty(Context.Request.Query["action"]) && !string.IsNullOrEmpty(Context.Request.Query["id"]))
-{
-    var voteAction = Context.Request.Query["action"].ToString();
-    var voteId = Context.Request.Query["id"].ToString();
-    <div class="modal fade show" id="voteModal" tabindex="-1" style="display:block; background:rgba(0,0,0,0.5);" aria-modal="true" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{(voteAction == "upvote" ? "Upvote" : "Downvote")} Post</h5>
-            <button type="button" class="btn-close" onclick="window.location='@Url.Action("Index", "Post")'"></button>
-          </div>
-          <div class="modal-body">
-            <div class="d-flex justify-content-center mb-3">
-                <span class="fs-2 me-3 @(voteAction=="upvote" ? "text-success" : "text-muted")">👍</span>
-                <span class="fs-2 ms-3 @(voteAction=="downvote" ? "text-danger" : "text-muted")">👎</span>
-            </div>
-            <form id="voteForm">
-                <input type="hidden" name="PostId" value="@voteId" />
-                <input type="hidden" name="IsUpvote" value="@(voteAction=="upvote" ? "true" : "false")" />
-                <div class="mb-3">
-                    <label for="voteReason" class="form-label">Reason <span class="text-danger">*</span></label>
-                    <textarea class="form-control" id="voteReason" name="Reason" required></textarea>
+                <div class="col-md-4">
+                    <label class="form-label">Ministry</label>
+                    <select name="TagId" class="form-select">
+                        <option value="">All Ministries</option>
+                        @if (tags != null)
+                        {
+                            foreach (var tag in tags)
+                            {
+                                <!option value="@tag.Id" @(query?.TagId == tag.Id ? "selected" : null)>@tag.Name</!option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Sort By</label>
+                    <select name="SortBy" class="form-select">
+                        <o!ption value="date" @(query?.SortBy == "date" ? "selected" : null)>Date</o>
+                        <!option value="likes" @(query?.SortBy == "likes" ? "selected" : null)>Likes</!option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Direction</label>
+                    <select name="SortDir" class="form-select">
+                        <!option value="desc" @(query?.SortDir == "desc" ? "selected" : null)>Newest First</!option>
+                        <!option value="asc" @(query?.SortDir == "asc" ? "selected" : null)>Oldest First</!option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#advFilterModal">
+                            <i class="bi bi-funnel"></i> Advanced Filters
+                        </button>
+                        <button type="button" id="resetFilters" class="btn btn-outline-danger">
+                            <i class="bi bi-x-circle"></i> Reset Filters
+                        </button>
+                    </div>
                 </div>
             </form>
-            <div id="voteError" class="text-danger"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="window.location='@Url.Action("Index", "Post")'">Cancel</button>
-            <button type="button" class="btn btn-primary" id="submitVoteBtn">Submit</button>
-          </div>
         </div>
-      </div>
     </div>
-    <script>
-    $(function() {
-        $('#submitVoteBtn').on('click', function() {
-            var reason = $('#voteReason').val().trim();
-            if (!reason) {
-                $('#voteError').text('Reason is required.');
-                return;
-            }
-            var data = $('#voteForm').serialize();
-            $.post('@Url.Action("Vote", "Post")', data)
-                .done(function(res) {
-                    if (res.success) {
-                        window.location = '@Url.Action("Index", "Post")';
-                    } else {
-                        $('#voteError').text(res.error || 'An error occurred.');
+
+    <!-- Advanced Filters Modal -->
+    <div class="modal fade" id="advFilterModal" tabindex="-1" aria-labelledby="advFilterModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="advFilterModalLabel">Advanced Filters</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="DateFrom" class="form-label">Date From</label>
+                        <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@(query?.DateFrom?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="DateTo" class="form-label">Date To</label>
+                        <input type="date" class="form-control" id="DateTo" name="DateTo" value="@(query?.DateTo?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="postsFilterForm">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="posts-grid">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="post-card" onclick="window.location='@Url.Action("Details", "Post", new { id = post.Id })'">
+                <div class="post-card-title">@post.Title</div>
+                @if (!string.IsNullOrWhiteSpace(post.Tag))
+                {
+                    <div class="post-card-tag">@post.Tag</div>
+                }
+                <div class="post-card-row">
+                    <div class="post-votes" onclick="event.stopPropagation();">
+                        <span class="post-upvotes" style="background:none;padding:0;">
+                            <a href="@Url.Action("Details", "Post", new { id = post.Id, action = "upvote" })#add-comment" class="btn btn-success btn-sm ms-2 d-inline-flex align-items-center" title="Upvote" style="gap:0.3rem;">
+                                <span>👍</span><span class="vote-count">@post.Upvotes</span>
+                            </a>
+                        </span>
+                        <span class="post-downvotes ms-2" style="background:none;padding:0;">
+                            <a href="@Url.Action("Details", "Post", new { id = post.Id, action = "downvote" })#add-comment" class="btn btn-danger btn-sm ms-1 d-inline-flex align-items-center" title="Downvote" style="gap:0.3rem;">
+                                <span>👎</span><span class="vote-count">@post.Downvotes</span>
+                            </a>
+                        </span>
+                    </div>
+                    <div class="post-details-link">
+                        Details <span>&rarr;</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.HasMore)
+    {
+        <form method="get" class="text-center mt-4">
+            @foreach (var prop in typeof(PostListQuery).GetProperties())
+            {
+                if (prop.Name != "Page")
+                {
+                    var value = prop.GetValue(query);
+                    if (value != null)
+                    {
+                        <input type="hidden" name="@prop.Name" value="@value" />
                     }
-                })
-                .fail(function() {
-                    $('#voteError').text('An error occurred.');
-                });
-        });
-    });
-    </script>
-}
-</div>
+                }
+            }
+            <input type="hidden" name="Page" value="@(query?.Page + 1 ?? 2)" />
+            <button type="submit" class="btn btn-outline-primary btn-lg">Load More</button>
+        </form>
+    }
 </div>
 
+<style>
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.post-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.post-card:active {
+    transform: translateY(0);
+}
+
+.post-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.post-card-tag {
+    display: inline-block;
+    background: #e9ecef;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.post-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.post-details-link {
+    color: #0d6efd;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-votes a {
+    text-decoration: none;
+}
+
+.post-votes a:hover {
+    transform: scale(1.05);
+}
+</style>
+
 <script>
-    function vote(action, postId) {
-        window.location.href = `?action=${action}&id=${postId}`;
-    }
+$(function() {
+    // Auto-submit on filter change
+    $('#postsFilterForm select, #postsFilterForm input[type="date"]').on('change', function() {
+        $('#postsFilterForm').submit();
+    });
+
+    // Submit form on search after typing stops
+    let searchTimeout;
+    $('#postsFilterForm input[name="Search"]').on('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            $('#postsFilterForm').submit();
+        }, 500);
+    });
+
+    // Reset filters
+    $('#resetFilters').on('click', function() {
+        window.location = '@Url.Action("Index", "Post")';
+    });
+});
 </script>

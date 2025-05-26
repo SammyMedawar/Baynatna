@@ -55,6 +55,13 @@ namespace Baynatna.Controllers
         [HttpGet]
         public IActionResult TokenRequest() => View();
 
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpPost]
         public async Task<IActionResult> TokenRequest(TokenRequestViewModel model)
         {

@@ -16,5 +16,8 @@ namespace Baynatna.ViewModels
         public bool IsQuarantined { get; set; }
         public List<CommentViewModel> Comments { get; set; } = new();
         public AddCommentViewModel NewComment { get; set; } = new();
+        public int Upvotes { get; set; }
+        public int Downvotes { get; set; }
+        public bool? UserVote { get; set; } // true=upvote, false=downvote, null=not voted
     }
 } 
