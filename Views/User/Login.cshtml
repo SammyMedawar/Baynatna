@@ -2,25 +2,39 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div class="header-padding">
-<h2>Login</h2>
-<form asp-action="Login" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="Username" class="form-label"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<link rel="stylesheet" href="~/css/common.css" />
+<link rel="stylesheet" href="~/css/account.css" />
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Please sign in to your account</p>
     </div>
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-    <a asp-action="Register" class="btn btn-link">Register</a>
-    <a asp-action="TokenRequest" class="btn btn-link">Need a token?</a>
-</form>
+    
+    <form asp-action="Login" method="post" class="auth-form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label">Username</label>
+            <input asp-for="Username" class="form-control" placeholder="Enter your username" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Sign In</button>
+        
+        <div class="auth-links">
+            <a asp-action="Register" class="btn btn-link">Create Account</a>
+            <a asp-action="TokenRequest" class="btn btn-link">Need a token?</a>
+        </div>
+    </form>
 </div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 } 

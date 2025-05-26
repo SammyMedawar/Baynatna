@@ -34,17 +34,18 @@
     color: #222;
     font-weight: normal;
     transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+    border: 3px solid transparent;
 }
-.home-option.posts {
+.home-option.complaints {
     background: #3ad5d7;
     color: #111;
     font-weight: bold;
 }
-.home-option.my-posts {
-    background: #fff;
-    color: #222;
+.home-option.my-complaints {
+    background: rgb(255, 170, 140);
+    color: #111;
     font-weight: bold;
-}
+}    
 .home-option.login, .home-option.logout {
     background: #27242d;
     color: #fff;
@@ -60,4 +61,12 @@
 .header-padding {
     padding-left: 2rem;
     padding-right: 2rem;
-} 
+}
+.home-option.complaints:hover,
+.home-option.my-complaints:hover,
+.home-option.login:hover,
+.home-option.logout:hover {
+    border: 3px solid #007bff; 
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+    transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}

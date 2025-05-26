@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Terms and Conditions";
+}
+<link rel="stylesheet" href="~/css/common.css" />
+<link rel="stylesheet" href="~/css/home.css" />
+<link rel="stylesheet" href="~/css/terms.css" />
+
+<div class="hero-banner">
+    <h1 class="display-3 fw-bold text-center">@ViewData["Title"]</h1>
+    <p class="lead text-center">
+        Please read these terms and conditions carefully before using our platform. By accessing or using our services, you agree to be bound by them.
+    </p>
+</div>
+
+<div class="language-switcher text-center my-4">
+    <button onclick="switchLanguage('en')" class="lang-btn" style="background-color:#007bff; color:white;">🇬🇧 English</button>
+    <button onclick="switchLanguage('ar')" class="lang-btn" style="background-color:#28a745; color:white;">🇱🇧 العربية</button>
+    <button onclick="switchLanguage('fr')" class="lang-btn" style="background-color:#ffc107; color:black;">🇫🇷 Français</button>
+</div>
+
+<div class="home-options text-center">
+    <div id="en" class="terms-content" style=" text-align: center">
+        <h3>1. Acceptance of Terms ✅</h3>
+        <p>By using our site, you confirm that you accept these terms of use and agree to comply with them.</p>
+
+        <h3>2. User Responsibilities 🧑‍💻</h3>
+        <p>You agree not to misuse our platform. Any complaint submitted must be truthful and not harmful or defamatory.</p>
+
+        <h3>3. Content Rights 📄</h3>
+        <p>All content posted remains the property of the user, but by submitting it, you grant us the right to use and share it anonymously for civic and governmental processing.</p>
+
+        <h3>4. Modifications ⚙️</h3>
+        <p>We may update these terms at any time. Continued use of the platform indicates your acceptance of the changes.</p>
+
+        <h3>5. Limitation of Liability ⚖️</h3>
+        <p>We are not liable for any direct or indirect damages arising from use or misuse of the platform.</p>
+    </div>
+
+    <div id="ar" class="terms-content" style="display:none; direction: rtl; text-align: center;">
+        <h3>١. قبول الشروط ✅</h3>
+        <p>باستخدامك لمنصتنا، فإنك تؤكد موافقتك على هذه الشروط والتزامك بها.</p>
+
+        <h3>٢. مسؤوليات المستخدم 🧑‍💻</h3>
+        <p>توافق على عدم إساءة استخدام منصتنا. يجب أن تكون أي شكوى مقدمة حقيقية وغير ضارة أو تشهيرية.</p>
+
+        <h3>٣. حقوق المحتوى 📄</h3>
+        <p>جميع المحتويات تبقى ملكًا للمستخدم، ولكنك تمنحنا الحق في استخدامها ومشاركتها بشكل مجهول لأغراض مدنية وحكومية.</p>
+
+        <h3>٤. التعديلات ⚙️</h3>
+        <p>قد نقوم بتحديث هذه الشروط في أي وقت. استمرارك في استخدام المنصة يعني قبولك للتغييرات.</p>
+
+        <h3>٥. تحديد المسؤولية ⚖️</h3>
+        <p>نحن غير مسؤولين عن أي أضرار مباشرة أو غير مباشرة ناتجة عن استخدام أو سوء استخدام المنصة.</p>
+    </div>
+
+    <div id="fr" class="terms-content" style="display:none; text-align: center">
+        <h3>1. Acceptation des conditions ✅</h3>
+        <p>En utilisant notre site, vous confirmez que vous acceptez ces conditions et que vous vous y conformerez.</p>
+
+        <h3>2. Responsabilités de l'utilisateur 🧑‍💻</h3>
+        <p>Vous acceptez de ne pas abuser de notre plateforme. Toute plainte soumise doit être véridique et non diffamatoire.</p>
+
+        <h3>3. Droits sur le contenu 📄</h3>
+        <p>Tout contenu publié reste la propriété de l'utilisateur, mais vous nous autorisez à l'utiliser et à le partager anonymement à des fins civiques et gouvernementales.</p>
+
+        <h3>4. Modifications ⚙️</h3>
+        <p>Nous pouvons mettre à jour ces conditions à tout moment. L'utilisation continue de la plateforme vaut acceptation des modifications.</p>
+
+        <h3>5. Limitation de responsabilité ⚖️</h3>
+        <p>Nous ne sommes pas responsables des dommages directs ou indirects résultant de l'utilisation ou de la mauvaise utilisation de la plateforme.</p>
+    </div>
+</div>
+
+<script>
+    function switchLanguage(lang) {
+        document.getElementById('en').style.display = 'none';
+        document.getElementById('ar').style.display = 'none';
+        document.getElementById('fr').style.display = 'none';
+
+        document.getElementById(lang).style.display = 'block';
+    }
+</script>

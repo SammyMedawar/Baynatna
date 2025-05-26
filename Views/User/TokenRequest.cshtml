@@ -2,32 +2,49 @@
 @{
     ViewData["Title"] = "Token Request";
 }
-<h2>Request a Verification Token</h2>
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-success">@ViewBag.Message</div>
-}
-<form asp-action="TokenRequest" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="Phone" class="form-label"></label>
-        <input asp-for="Phone" class="form-control" />
-        <span asp-validation-for="Phone" class="text-danger"></span>
+<link rel="stylesheet" href="~/css/account.css" />
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Request Verification Token</h2>
+        <p>Please provide your contact information to receive a verification token</p>
     </div>
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="IdOrProof" class="form-label"></label>
-        <input asp-for="IdOrProof" class="form-control" />
-        <span asp-validation-for="IdOrProof" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Request Token</button>
-    <a asp-action="Login" class="btn btn-link">Login</a>
-    <a asp-action="Register" class="btn btn-link">Register</a>
-</form>
+    
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">@ViewBag.Message</div>
+    }
+    
+    <form asp-action="TokenRequest" method="post" class="auth-form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Phone Number</label>
+            <input asp-for="Phone" class="form-control" placeholder="Enter your phone number" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email Address</label>
+            <input asp-for="Email" class="form-control" placeholder="Enter your email address" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="IdOrProof" class="form-label">ID or Proof of Residency</label>
+            <input asp-for="IdOrProof" class="form-control" placeholder="Enter your ID or proof of residency" />
+            <span asp-validation-for="IdOrProof" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Request Token</button>
+        
+        <div class="auth-links">
+            <a asp-action="Login" class="btn btn-link">Back to Login</a>
+            <a asp-action="Register" class="btn btn-link">Create Account</a>
+        </div>
+    </form>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 } 

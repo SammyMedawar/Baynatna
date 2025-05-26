@@ -13,7 +13,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-turquoise header-padding">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Baynatna</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" alt="Baynatna Logo" style="height:35px;">
+                </a>
                 <div class="d-flex align-items-center ms-auto">
                     <button id="decrease-font" class="btn btn-header me-2" title="Decrease font size">A-</button>
                     <button id="increase-font" class="btn btn-header me-2" title="Increase font size">A+</button>
@@ -36,8 +38,23 @@
     </div>
 
     <footer class="border-top footer text-muted footer-turquoise">
-        <div class="container">
-            &copy; 2025 - Baynatna - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <style>
+            .footer-link {
+                color: #f0f0f0;
+                text-decoration: none;
+                transition: text-decoration 0.3s ease;
+            }
+
+            .footer-link:hover {
+                color: rgb(58, 213, 215);
+                text-decoration: underline;
+            }
+        </style>
+
+        <div class="container" style="text-align:center; font-size: 14px; color: #ccc; background-color: rgb(39, 36, 45);">
+            &copy; 2025 Baynatna &nbsp;|&nbsp;
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="footer-link">Privacy Policy</a> &nbsp;|&nbsp;
+            <a asp-area="" asp-controller="Home" asp-action="Terms" class="footer-link">Terms and Conditions</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
