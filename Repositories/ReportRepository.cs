@@ -6,24 +6,63 @@ using Baynatna.Repositories.Interfaces;
 
 namespace Baynatna.Repositories
 {
-    public class ReportRepository : IReportRepository
+    public class ReportRepository : Repository<Report>, IReportRepository
     {
-        private readonly BaynatnaContext _context;
-        public ReportRepository(BaynatnaContext context)
+        public ReportRepository(BaynatnaContext context) : base(context)
         {
-            _context = context;
         }
 
-        public async Task<Report?> GetByIdAsync(int id) => await _context.Reports.FindAsync(id);
+        public override async Task<IEnumerable<Report>> GetAllAsync()
+        {
+            return await _context.Reports
+                .Include(r => r.Reporter)
+                .Include(r => r.Complaint)
+                .Include(r => r.Comment)
+                .ToListAsync();
+        }
 
-        public async Task<IEnumerable<Report>> GetAllAsync() => await _context.Reports.ToListAsync();
+        public override async Task<Report?> GetByIdAsync(int id)
+        {
+            return await _context.Reports
+                .Include(r => r.Reporter)
+                .Include(r => r.Complaint)
+                .Include(r => r.Comment)
+                .FirstOrDefaultAsync(r => r.Id == id);
+        }
 
-        public async Task AddAsync(Report entity) => await _context.Reports.AddAsync(entity);
+        public override async Task<IEnumerable<Report>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _context.Reports
+                .Include(r => r.Reporter)
+                .Include(r => r.Complaint)
+                .Include(r => r.Comment)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
-        public void Update(Report entity) => _context.Reports.Update(entity);
+        public override async Task<Report> AddAsync(Report entity)
+        {
+            await _context.Reports.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public void Delete(Report entity) => _context.Reports.Remove(entity);
+        public override async Task<Report> UpdateAsync(Report entity)
+        {
+            _context.Reports.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public override async Task DeleteAsync(int id)
+        {
+            var report = await _context.Reports.FindAsync(id);
+            if (report != null)
+            {
+                _context.Reports.Remove(report);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 } 

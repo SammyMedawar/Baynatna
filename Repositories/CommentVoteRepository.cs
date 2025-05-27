@@ -6,24 +6,60 @@ using Baynatna.Repositories.Interfaces;
 
 namespace Baynatna.Repositories
 {
-    public class CommentVoteRepository : ICommentVoteRepository
+    public class CommentVoteRepository : Repository<CommentVote>, ICommentVoteRepository
     {
-        private readonly BaynatnaContext _context;
-        public CommentVoteRepository(BaynatnaContext context)
+        public CommentVoteRepository(BaynatnaContext context) : base(context)
         {
-            _context = context;
         }
 
-        public async Task<CommentVote?> GetByIdAsync(int id) => await _context.CommentVotes.FindAsync(id);
+        public override async Task<IEnumerable<CommentVote>> GetAllAsync()
+        {
+            return await _context.CommentVotes
+                .Include(cv => cv.User)
+                .Include(cv => cv.Comment)
+                .ToListAsync();
+        }
 
-        public async Task<IEnumerable<CommentVote>> GetAllAsync() => await _context.CommentVotes.ToListAsync();
+        public override async Task<CommentVote?> GetByIdAsync(int id)
+        {
+            return await _context.CommentVotes
+                .Include(cv => cv.User)
+                .Include(cv => cv.Comment)
+                .FirstOrDefaultAsync(cv => cv.Id == id);
+        }
 
-        public async Task AddAsync(CommentVote entity) => await _context.CommentVotes.AddAsync(entity);
+        public override async Task<IEnumerable<CommentVote>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _context.CommentVotes
+                .Include(cv => cv.User)
+                .Include(cv => cv.Comment)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
-        public void Update(CommentVote entity) => _context.CommentVotes.Update(entity);
+        public override async Task<CommentVote> AddAsync(CommentVote entity)
+        {
+            await _context.CommentVotes.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public void Delete(CommentVote entity) => _context.CommentVotes.Remove(entity);
+        public override async Task<CommentVote> UpdateAsync(CommentVote entity)
+        {
+            _context.CommentVotes.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public override async Task DeleteAsync(int id)
+        {
+            var vote = await _context.CommentVotes.FindAsync(id);
+            if (vote != null)
+            {
+                _context.CommentVotes.Remove(vote);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 } 

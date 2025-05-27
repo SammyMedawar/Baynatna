@@ -1,25 +1,25 @@
-@model Baynatna.ViewModels.PostListResult
+@model Baynatna.ViewModels.ComplaintListResult
 @using Baynatna.ViewModels
 @{
-    ViewData["Title"] = "Posts";
+    ViewData["Title"] = "Complaints";
     var tags = ViewBag.Tags as List<Baynatna.ViewModels.TagViewModel>;
-    var query = ViewBag.Query as Baynatna.ViewModels.PostListQuery;
+    var query = ViewBag.Query as Baynatna.ViewModels.ComplaintListQuery;
 }
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="~/css/common.css" />
-<link rel="stylesheet" href="~/css/posts.css" />
+<link rel="stylesheet" href="~/css/complaints.css" />
 <div class="header-padding">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Posts</h2>
-        <a href="@Url.Action("Create", "Post")" class="btn btn-primary">Create Post</a>
+        <h2 class="mb-0">Complaints</h2>
+        <a href="@Url.Action("Create", "Complaint")" class="btn btn-primary">Create Complaint</a>
     </div>
 
     <div class="card mb-4">
         <div class="card-body">
-            <form method="get" class="row g-3" id="postsFilterForm">
+            <form method="get" class="row g-3" id="complaintsFilterForm">
                 <div class="col-md-4">
                     <label class="form-label">Search</label>
-                    <input type="text" name="Search" class="form-control" placeholder="Search posts..." value="@query?.Search" />
+                    <input type="text" name="Search" class="form-control" placeholder="Search complaints..." value="@query?.Search" />
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Ministry</label>
@@ -73,44 +73,44 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="DateFrom" class="form-label">Date From</label>
-                        <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@(query?.DateFrom?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
+                        <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@(query?.DateFrom?.ToString("yyyy-MM-dd"))" form="complaintsFilterForm" />
                     </div>
                     <div class="mb-3">
                         <label for="DateTo" class="form-label">Date To</label>
-                        <input type="date" class="form-control" id="DateTo" name="DateTo" value="@(query?.DateTo?.ToString("yyyy-MM-dd"))" form="postsFilterForm" />
+                        <input type="date" class="form-control" id="DateTo" name="DateTo" value="@(query?.DateTo?.ToString("yyyy-MM-dd"))" form="complaintsFilterForm" />
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="postsFilterForm">Apply Filters</button>
+                    <button type="submit" class="btn btn-primary" form="complaintsFilterForm">Apply Filters</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="posts-grid">
-        @foreach (var post in Model.Posts)
+    <div class="complaints-grid">
+        @foreach (var complaint in Model.Complaints)
         {
-            <div class="post-card" onclick="window.location='@Url.Action("Details", "Post", new { id = post.Id })'">
-                <div class="post-card-title">@post.Title</div>
-                @if (!string.IsNullOrWhiteSpace(post.Tag))
+            <div class="complaint-card" onclick="window.location='@Url.Action("Details", "Complaint", new { id = complaint.Id })'">
+                <div class="complaint-card-title">@complaint.Title</div>
+                @if (!string.IsNullOrWhiteSpace(complaint.Tag))
                 {
-                    <div class="post-card-tag">@post.Tag</div>
+                    <div class="complaint-card-tag">@complaint.Tag</div>
                 }
-                <div class="post-card-row">
-                    <div class="post-votes" onclick="event.stopPropagation();">
-                        <span class="post-upvotes" style="background:none;padding:0;">
-                            <a href="@Url.Action("Details", "Post", new { id = post.Id, action = "upvote" })#add-comment" class="btn btn-success btn-sm ms-2 d-inline-flex align-items-center" title="Upvote" style="gap:0.3rem;">
-                                <span>👍</span><span class="vote-count">@post.Upvotes</span>
+                <div class="complaint-card-row">
+                    <div class="complaint-votes" onclick="event.stopPropagation();">
+                        <span class="complaint-upvotes" style="background:none;padding:0;">
+                            <a href="@Url.Action("Details", "Complaint", new { id = complaint.Id, action = "upvote" })#add-comment" class="btn btn-success btn-sm ms-2 d-inline-flex align-items-center" title="Upvote" style="gap:0.3rem;">
+                                <span>👍</span><span class="vote-count">@complaint.Upvotes</span>
                             </a>
                         </span>
-                        <span class="post-downvotes ms-2" style="background:none;padding:0;">
-                            <a href="@Url.Action("Details", "Post", new { id = post.Id, action = "downvote" })#add-comment" class="btn btn-danger btn-sm ms-1 d-inline-flex align-items-center" title="Downvote" style="gap:0.3rem;">
-                                <span>👎</span><span class="vote-count">@post.Downvotes</span>
+                        <span class="complaint-downvotes ms-2" style="background:none;padding:0;">
+                            <a href="@Url.Action("Details", "Complaint", new { id = complaint.Id, action = "downvote" })#add-comment" class="btn btn-danger btn-sm ms-1 d-inline-flex align-items-center" title="Downvote" style="gap:0.3rem;">
+                                <span>👎</span><span class="vote-count">@complaint.Downvotes</span>
                             </a>
                         </span>
                     </div>
-                    <div class="post-details-link">
+                    <div class="complaint-details-link">
                         Details <span>&rarr;</span>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
     @if (Model.HasMore)
     {
         <form method="get" class="text-center mt-4">
-            @foreach (var prop in typeof(PostListQuery).GetProperties())
+            @foreach (var prop in typeof(ComplaintListQuery).GetProperties())
             {
                 if (prop.Name != "Page")
                 {
@@ -144,14 +144,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.posts-grid {
+.complaints-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
 
-.post-card {
+.complaint-card {
     background: white;
     border-radius: 10px;
     padding: 1.5rem;
@@ -161,22 +161,22 @@
     position: relative;
 }
 
-.post-card:hover {
+.complaint-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.post-card:active {
+.complaint-card:active {
     transform: translateY(0);
 }
 
-.post-card-title {
+.complaint-card-title {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1rem;
 }
 
-.post-card-tag {
+.complaint-card-tag {
     display: inline-block;
     background: #e9ecef;
     padding: 0.25rem 0.75rem;
@@ -185,13 +185,13 @@
     margin-bottom: 1rem;
 }
 
-.post-card-row {
+.complaint-card-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.post-details-link {
+.complaint-details-link {
     color: #0d6efd;
     font-weight: 500;
     display: flex;
@@ -199,11 +199,11 @@
     gap: 0.5rem;
 }
 
-.post-votes a {
+.complaint-votes a {
     text-decoration: none;
 }
 
-.post-votes a:hover {
+.complaint-votes a:hover {
     transform: scale(1.05);
 }
 </style>
@@ -211,22 +211,22 @@
 <script>
 $(function() {
     // Auto-submit on filter change
-    $('#postsFilterForm select, #postsFilterForm input[type="date"]').on('change', function() {
-        $('#postsFilterForm').submit();
+    $('#complaintsFilterForm select, #complaintsFilterForm input[type="date"]').on('change', function() {
+        $('#complaintsFilterForm').submit();
     });
 
     // Submit form on search after typing stops
     let searchTimeout;
-    $('#postsFilterForm input[name="Search"]').on('input', function() {
+    $('#complaintsFilterForm input[name="Search"]').on('input', function() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
-            $('#postsFilterForm').submit();
+            $('#complaintsFilterForm').submit();
         }, 500);
     });
 
     // Reset filters
     $('#resetFilters').on('click', function() {
-        window.location = '@Url.Action("Index", "Post")';
+        window.location = '@Url.Action("Index", "Complaint")';
     });
 });
 </script>

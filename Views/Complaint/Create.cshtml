@@ -1,23 +1,23 @@
-@model Baynatna.ViewModels.CreatePostViewModel
+@model Baynatna.ViewModels.CreateComplaintViewModel
 @{
-    ViewData["Title"] = "Create Post";
+    ViewData["Title"] = "Create Complaint";
     var tags = ViewBag.Tags as List<Baynatna.Models.Tag>;
 }
-<h2>Create Post</h2>
+<h2>Create Complaint</h2>
 <form asp-action="Create" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
-        <label asp-for="OriginalTitle" class="form-label">Post Title (English or Arabic)</label>
+        <label asp-for="OriginalTitle" class="form-label">Complaint Title (English or Arabic)</label>
         <input asp-for="OriginalTitle" class="form-control" />
         <span asp-validation-for="OriginalTitle" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="TranslatedTitle" class="form-label">Post Title (Other Language)</label>
+        <label asp-for="TranslatedTitle" class="form-label">Complaint Title (Other Language)</label>
         <input asp-for="TranslatedTitle" class="form-control" />
         <span asp-validation-for="TranslatedTitle" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="OriginalBody" class="form-label">Post Body: Your comment in english or arabic</label>
+        <label asp-for="OriginalBody" class="form-label">Complaint Body: Your comment in english or arabic</label>
         <textarea asp-for="OriginalBody" class="form-control"></textarea>
         <span asp-validation-for="OriginalBody" class="text-danger"></span>
     </div>
@@ -51,7 +51,7 @@
         </select>
         <span asp-validation-for="TagId" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success">Create Post</button>
+    <button type="submit" class="btn btn-success">Create Complaint</button>
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -6,24 +6,60 @@ using Baynatna.Repositories.Interfaces;
 
 namespace Baynatna.Repositories
 {
-    public class CommentRepository : ICommentRepository
+    public class CommentRepository : Repository<Comment>, ICommentRepository
     {
-        private readonly BaynatnaContext _context;
-        public CommentRepository(BaynatnaContext context)
+        public CommentRepository(BaynatnaContext context) : base(context)
         {
-            _context = context;
         }
 
-        public async Task<Comment?> GetByIdAsync(int id) => await _context.Comments.FindAsync(id);
+        public override async Task<IEnumerable<Comment>> GetAllAsync()
+        {
+            return await _context.Comments
+                .Include(c => c.User)
+                .Include(c => c.CommentVotes)
+                .ToListAsync();
+        }
 
-        public async Task<IEnumerable<Comment>> GetAllAsync() => await _context.Comments.ToListAsync();
+        public override async Task<Comment?> GetByIdAsync(int id)
+        {
+            return await _context.Comments
+                .Include(c => c.User)
+                .Include(c => c.CommentVotes)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
 
-        public async Task AddAsync(Comment entity) => await _context.Comments.AddAsync(entity);
+        public override async Task<IEnumerable<Comment>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _context.Comments
+                .Include(c => c.User)
+                .Include(c => c.CommentVotes)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
-        public void Update(Comment entity) => _context.Comments.Update(entity);
+        public override async Task<Comment> AddAsync(Comment entity)
+        {
+            await _context.Comments.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public void Delete(Comment entity) => _context.Comments.Remove(entity);
+        public override async Task<Comment> UpdateAsync(Comment entity)
+        {
+            _context.Comments.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public override async Task DeleteAsync(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 } 

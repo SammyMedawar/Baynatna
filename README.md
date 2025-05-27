@@ -6,17 +6,17 @@
 
 ## 🌐 Features
 
-- 🗳️ **Anonymous Posts** with unique thread IDs
+- 🗳️ **Anonymous Complaints** with unique thread IDs
 - 👍 **Upvote/Downvote with Reason** required for each vote
 - 🧾 **Token-Based Registration** with optional ID verification
 - 🔐 **Simple Auth** using only username and password
-- 🌍 **Multilingual Support** (English and Arabic bodies per post/comment)
+- 🌍 **Multilingual Support** (English and Arabic bodies per complaint/comment)
 - 🔁 **Moderator Tools** for managing and quarantining content
 - 🔇 **Transparency**: Hidden but viewable deleted comments
-- 🎤 **Voice Message Support** for posts and comments
+- 🎤 **Voice Message Support** for complaints and comments
 - 🔎 **Search & Filtering** by ministry (wizara), date, likes, and comments
-- 🧩 **Pagination** and sorting for posts and comments
-- 🧠 **Accessibility**: 
+- 🧩 **Pagination** and sorting for complaints and comments
+- 🧠 **Accessibility**:
   - Adjustable font size
   - Voice-to-text and AI narration (planned)
   - Color-blind friendly themes
@@ -27,8 +27,8 @@
 ## 📊 Voting System
 
 - Votes require a reason (like Stack Overflow)
-- Votes are limited to one per user per post
-- Super upvoted quarantined posts notify moderators
+- Votes are limited to one per user per complaint
+- Super upvoted quarantined complaints notify moderators
 
 ---
 

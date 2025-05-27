@@ -73,7 +73,7 @@
                     <button id="increase-font" class="btn btn-header me-2" title="Increase font size">A+</button>
                     @if (Context.Session.GetInt32("UserId") != null)
                     {
-                        <a class="btn btn-header" asp-controller="Post" asp-action="Create">Add a Complaint</a>
+                        <a class="btn btn-header" asp-controller="Complaint" asp-action="Create">Add a Complaint</a>
                     }
                     else
                     {
@@ -176,11 +176,11 @@
     </script>
     <script>
         $(function() {
-            if ($('.post-card-tag').length > 0) {
-                $('.post-card-tag').matchHeight();
+            if ($('.complaint-card-tag').length > 0) {
+                $('.complaint-card-tag').matchHeight();
             }
-            if ($('.post-card-title').length > 0) {
-                $('.post-card-title').matchHeight();
+            if ($('.complaint-card-title').length > 0) {
+                $('.complaint-card-title').matchHeight();
             }
         });
     </script>

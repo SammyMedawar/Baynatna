@@ -6,11 +6,14 @@ namespace Baynatna.Repositories.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        Task<T?> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
-        Task AddAsync(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<T?> GetByIdAsync(int id);
+        Task<T> AddAsync(T entity);
+        Task<T> UpdateAsync(T entity);
+        Task DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
+        Task<int> CountAsync();
+        Task<IEnumerable<T>> GetPagedAsync(int page, int pageSize);
         Task SaveChangesAsync();
     }
 } 

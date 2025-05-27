@@ -6,7 +6,7 @@ namespace Baynatna.Models
     public class Comment
     {
         public int Id { get; set; }
-        public int PostId { get; set; }
+        public int ComplaintId { get; set; }
         public int UserId { get; set; }
         public string OriginalBody { get; set; } = null!;
         public string? TranslatedBody { get; set; }
@@ -15,7 +15,7 @@ namespace Baynatna.Models
         public bool IsDeletedByModerator { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public Post Post { get; set; } = null!;
+        public Complaint Complaint { get; set; } = null!;
         public User User { get; set; } = null!;
         public ICollection<CommentVote>? CommentVotes { get; set; }
     }

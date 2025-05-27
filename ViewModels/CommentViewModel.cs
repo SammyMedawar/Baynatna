@@ -3,7 +3,7 @@ namespace Baynatna.ViewModels
     public class CommentViewModel
     {
         public int Id { get; set; }
-        public int PostId { get; set; }
+        public int ComplaintId { get; set; }
         public int UserId { get; set; }
         public string Body { get; set; } = null!;
         public string? TranslatedBody { get; set; }

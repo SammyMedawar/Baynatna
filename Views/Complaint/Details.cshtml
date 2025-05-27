@@ -1,4 +1,4 @@
-@model Baynatna.ViewModels.PostDetailsViewModel
+@model Baynatna.ViewModels.ComplaintDetailsViewModel
 @{
     ViewData["Title"] = Model.Title;
     var canVote = Context.Session.GetInt32("UserId") != null && !Model.IsOwner;
@@ -9,12 +9,12 @@
 <div class="header-padding mt-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center position-relative" style="min-height:2.5rem;">
-            <a href="@Url.Action("Index", "Post")" class="btn btn-link back-btn-abs" style="position:absolute;left:-10px;top:50%;transform:translateY(-50%);color:#000;"><span style="font-size:1.5rem">&#8592;</span></a>
+            <a href="@Url.Action("Index", "Complaint")" class="btn btn-link back-btn-abs" style="position:absolute;left:-10px;top:50%;transform:translateY(-50%);color:#000;"><span style="font-size:1.5rem">&#8592;</span></a>
             <h2 class="mb-0" style="margin-left:2.5rem;">@Model.Title <span class="text-muted small ms-3">@Model.CreatedAt.ToString("g")</span></h2>
         </div>
         @if (Model.IsOwner)
         {
-            <button class="btn btn-link text-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Delete Post">
+            <button class="btn btn-link text-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Delete Complaint">
                 <span style="font-size:1.5rem" class="bi bi-trash">🗑️</span>
             </button>
         }
@@ -39,7 +39,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Tag))
     {
         <div class="mb-2">
-            <span class="post-card-tag">@Model.Tag</span>
+            <span class="complaint-card-tag">@Model.Tag</span>
         </div>
     }
     <div class="mt-4">
@@ -83,9 +83,9 @@
                                 }
                                 @if (comment.CanDelete)
                                 {
-                                    <form asp-action="DeleteComment" asp-controller="Post" method="post" style="display:inline;">
+                                    <form asp-action="DeleteComment" asp-controller="Complaint" method="post" style="display:inline;">
                                         <input type="hidden" name="id" value="@comment.Id" />
-                                        <input type="hidden" name="postId" value="@Model.Id" />
+                                        <input type="hidden" name="complaintId" value="@Model.Id" />
                                         <button type="submit" class="btn btn-link text-danger" title="Delete Comment">🗑️</button>
                                     </form>
                                 }
@@ -104,8 +104,8 @@
         @if (Context.Session.GetInt32("UserId") != null && !Model.IsOwner)
         {
             <h5>Add a Comment</h5>
-            <form asp-action="AddComment" asp-controller="Post" method="post" id="addCommentForm">
-                <input type="hidden" name="PostId" value="@Model.Id" />
+            <form asp-action="AddComment" asp-controller="Complaint" method="post" id="addCommentForm">
+                <input type="hidden" name="ComplaintId" value="@Model.Id" />
                 <input type="hidden" id="VoteAction" name="VoteAction" value="" />
                 <div class="mb-2">
                     <textarea name="Body" class="form-control" required placeholder="Write your comment..." minlength="1"></textarea>
@@ -147,7 +147,7 @@
 </style>
 <script>
     function voteComment(commentId, isUpvote) {
-        $.post('@Url.Action("VoteComment", "Post")', { commentId: commentId, isUpvote: isUpvote })
+        $.post('@Url.Action("VoteComment", "Complaint")', { commentId: commentId, isUpvote: isUpvote })
             .done(function(res) {
                 if (res.success) {
                     location.reload();
@@ -219,15 +219,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete Post</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Complaint</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this post? This action cannot be undone.
+                    Are you sure you want to delete this complaint? This action cannot be undone.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form asp-action="Delete" asp-controller="Post" method="post" style="display:inline;">
+                    <form asp-action="Delete" asp-controller="Complaint" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="@Model.Id" />
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>

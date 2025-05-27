@@ -6,25 +6,67 @@ using Baynatna.Repositories.Interfaces;
 
 namespace Baynatna.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
-        private readonly BaynatnaContext _context;
-        public UserRepository(BaynatnaContext context)
+        public UserRepository(BaynatnaContext context) : base(context)
         {
-            _context = context;
         }
 
-        public async Task<User?> GetByIdAsync(int id) => await _context.Users.FindAsync(id);
+        public override async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Complaints)
+                .Include(u => u.Comments)
+                .Include(u => u.ComplaintVotes)
+                .Include(u => u.CommentVotes)
+                .ToListAsync();
+        }
 
-        public async Task<IEnumerable<User>> GetAllAsync() => await _context.Users.ToListAsync();
+        public override async Task<User?> GetByIdAsync(int id)
+        {
+            return await _context.Users
+                .Include(u => u.Complaints)
+                .Include(u => u.Comments)
+                .Include(u => u.ComplaintVotes)
+                .Include(u => u.CommentVotes)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
 
-        public async Task AddAsync(User entity) => await _context.Users.AddAsync(entity);
+        public override async Task<IEnumerable<User>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _context.Users
+                .Include(u => u.Complaints)
+                .Include(u => u.Comments)
+                .Include(u => u.ComplaintVotes)
+                .Include(u => u.CommentVotes)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
-        public void Update(User entity) => _context.Users.Update(entity);
+        public override async Task<User> AddAsync(User entity)
+        {
+            await _context.Users.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public void Delete(User entity) => _context.Users.Remove(entity);
+        public override async Task<User> UpdateAsync(User entity)
+        {
+            _context.Users.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public override async Task DeleteAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         public async Task<User?> GetByUsernameAsync(string username) => await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }

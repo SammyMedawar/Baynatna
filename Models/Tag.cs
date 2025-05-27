@@ -7,6 +7,6 @@ namespace Baynatna.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
-        public ICollection<PostTag>? PostTags { get; set; }
+        public ICollection<ComplaintTag>? ComplaintTags { get; set; }
     }
 } 

@@ -7,7 +7,7 @@
     --bg-color: #fff;
     --text-color: #111;
     --card-bg: #fff;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     --border-color: #e5e5e5;
     --link-color: #0d6efd;
     --tag-bg: #3ad5d7;
@@ -23,7 +23,7 @@
     --bg-color: #1a1a1a;
     --text-color: #f5f5f5;
     --card-bg: #2d2d2d;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     --border-color: #404040;
     --link-color: #66b3ff;
     --tag-bg: #2a9d9f;
@@ -39,7 +39,7 @@
     --bg-color: #f0f8ff;
     --text-color: #003366;
     --card-bg: #ffffff;
-    --card-shadow: 0 4px 16px rgba(0,51,102,0.15);
+    --card-shadow: 0 4px 16px rgba(0, 51, 102, 0.15);
     --border-color: #4169e1;
     --link-color: #0000cd;
     --tag-bg: #ffd700;
@@ -55,7 +55,7 @@
     --bg-color: #001122;
     --text-color: #87ceeb;
     --card-bg: #003366;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     --border-color: #4682b4;
     --link-color: #87cefa;
     --tag-bg: #b8860b;
@@ -71,7 +71,7 @@
     --bg-color: #faf0ff;
     --text-color: #4b0082;
     --card-bg: #ffffff;
-    --card-shadow: 0 4px 16px rgba(75,0,130,0.15);
+    --card-shadow: 0 4px 16px rgba(75, 0, 130, 0.15);
     --border-color: #9370db;
     --link-color: #8a2be2;
     --tag-bg: #ff8c00;
@@ -87,7 +87,7 @@
     --bg-color: #1a0d26;
     --text-color: #dda0dd;
     --card-bg: #2d1b3d;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     --border-color: #8b7ab8;
     --link-color: #da70d6;
     --tag-bg: #cd853f;
@@ -103,7 +103,7 @@
     --bg-color: #fff5f5;
     --text-color: #8b0000;
     --card-bg: #ffffff;
-    --card-shadow: 0 4px 16px rgba(139,0,0,0.15);
+    --card-shadow: 0 4px 16px rgba(139, 0, 0, 0.15);
     --border-color: #dc143c;
     --link-color: #b22222;
     --tag-bg: #32cd32;
@@ -119,7 +119,7 @@
     --bg-color: #1a0808;
     --text-color: #ffb6c1;
     --card-bg: #330808;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     --border-color: #cd5c5c;
     --link-color: #ff69b4;
     --tag-bg: #228b22;
@@ -135,7 +135,7 @@
     --bg-color: #ffffff;
     --text-color: #000000;
     --card-bg: #f8f8f8;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     --border-color: #808080;
     --link-color: #404040;
     --tag-bg: #d3d3d3;
@@ -151,7 +151,7 @@
     --bg-color: #0a0a0a;
     --text-color: #f0f0f0;
     --card-bg: #1f1f1f;
-    --card-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
     --border-color: #606060;
     --link-color: #c0c0c0;
     --tag-bg: #505050;
@@ -174,22 +174,25 @@ body {
 }
 
 /* Common styles for Baynatna */
-.posts-grid {
+.complaints-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
 }
+
 @media (max-width: 900px) {
-    .posts-grid {
+    .complaints-grid {
         grid-template-columns: 1fr 1fr;
     }
 }
+
 @media (max-width: 600px) {
-    .posts-grid {
+    .complaints-grid {
         grid-template-columns: 1fr;
     }
 }
-.post-card {
+
+.complaint-card {
     background: var(--card-bg) !important;
     border-radius: 1rem;
     box-shadow: var(--card-shadow) !important;
@@ -199,13 +202,19 @@ body {
     gap: 0.75rem;
     border: 1px solid var(--border-color) !important;
 }
-.post-card-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-    color: var(--text-color) !important;
+
+.complaint-card * {
+    margin: 0;
+    padding: 0;
 }
-.post-card-tag {
+
+.complaint-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.complaint-card-tag {
     display: flex;
     align-items: center;
     background: var(--tag-bg) !important;
@@ -222,18 +231,22 @@ body {
     word-break: break-word;
     white-space: normal;
 }
-.post-card-row {
+
+.complaint-card-row {
     display: flex;
     align-items: center;
     gap: 1.5rem;
     margin-top: 0.5rem;
 }
-.post-votes {
+
+.complaint-votes {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
-.post-upvotes, .post-downvotes {
+
+.complaint-upvotes,
+.complaint-downvotes {
     background: none;
     padding: 0;
     color: inherit;
@@ -243,14 +256,13 @@ body {
     align-items: center;
     gap: 0.3rem;
 }
+
 .vote-count {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    margin-left: 0.2rem;
-    min-width: 1.5em;
-    text-align: center;
 }
-.post-details-btn {
+
+.complaint-details-btn {
     background: transparent;
     color: var(--link-color) !important;
     border: none;
@@ -261,35 +273,59 @@ body {
     gap: 0.3rem;
     cursor: pointer;
     transition: color 0.2s;
+    margin-top: 0.5rem;
 }
-.post-details-btn:hover, .post-details-btn:focus {
+
+.complaint-details-btn:hover,
+.complaint-details-btn:focus {
     color: var(--text-color) !important;
     background: transparent;
     border: none;
 }
-.post-details-link {
+
+.complaint-details-link {
     color: var(--link-color) !important;
     font-weight: 500;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    text-decoration: none;
 }
-.load-more-btn {
-    background: var(--tag-bg);
-    color: var(--tag-text);
-    border: 1.5px solid var(--tag-bg);
-    font-weight: bold;
-    padding: 0.7rem 2.5rem;
-    border-radius: 2rem;
-    margin: 2rem auto 0 auto;
-    display: block;
-    transition: background 0.2s, color 0.2s, border 0.2s;
+
+/* Fix form controls in all themes */
+.form-control,
+.form-select {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
 }
-.load-more-btn:hover, .load-more-btn:focus {
-    background: var(--text-color);
-    color: var(--bg-color);
-    border: 1.5px solid var(--text-color);
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--card-bg) !important;
+    border-color: var(--link-color) !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--link-color), 0.25) !important;
 }
+
+.form-control::placeholder {
+    color: var(--text-color) !important;
+    opacity: 0.6;
+}
+
+/* Ensure buttons maintain proper colors */
+.btn-primary {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    color: var(--bg-color) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-hover-color) !important;
+    border-color: var(--btn-hover-color) !important;
+    color: var(--bg-color) !important;
+}
+
 .navbar-turquoise {
     background: var(--navbar-bg) !important;
     color: var(--text-color) !important;
@@ -298,14 +334,19 @@ body {
     padding-left: 2rem;
     padding-right: 2rem;
 }
+
 .footer-turquoise {
     background: var(--footer-bg) !important;
     color: var(--footer-text) !important;
     text-align: center;
 }
-.navbar-turquoise .navbar-brand, .navbar-turquoise .btn, .navbar-turquoise .nav-link {
+
+.navbar-turquoise .navbar-brand,
+.navbar-turquoise .btn,
+.navbar-turquoise .nav-link {
     color: var(--text-color) !important;
 }
+
 .btn-header {
     background: transparent !important;
     color: var(--text-color) !important;
@@ -314,16 +355,20 @@ body {
     font-weight: bold !important;
     transition: background 0.2s, color 0.2s;
 }
-.btn-header:hover, .btn-header:focus {
+
+.btn-header:hover,
+.btn-header:focus {
     background: transparent !important;
     color: var(--btn-hover-color) !important;
     border: none !important;
 }
+
 .vote-selected {
     border-width: 3px !important;
     border-color: #059669 !important;
     background-color: #d1fae5 !important;
 }
+
 .vote-selected.down {
     border-color: #dc2626 !important;
     background-color: #fee2e2 !important;
@@ -369,7 +414,12 @@ body {
 }
 
 /* Additional elements that need theming */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: var(--text-color) !important;
 }
 
@@ -406,7 +456,7 @@ a {
     padding: 2rem;
     max-width: 500px;
     width: 90%;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--border-color);
 }
 
@@ -505,31 +555,31 @@ a {
 }
 
 /* Ensure all card text is properly colored */
-.post-card * {
+.complaint-card * {
     color: var(--text-color) !important;
 }
 
-.post-card-title {
+.complaint-card-title {
     font-size: 1.1rem;
     font-weight: bold;
     margin-bottom: 0.25rem;
     color: var(--text-color) !important;
 }
 
-.post-card .vote-count {
+.complaint-card .vote-count {
     color: var(--text-color) !important;
 }
 
-.post-card .post-upvotes,
-.post-card .post-downvotes {
+.complaint-card .complaint-upvotes,
+.complaint-card .complaint-downvotes {
     color: var(--text-color) !important;
 }
 
-.post-card .post-details-btn {
+.complaint-card .complaint-details-btn {
     color: var(--link-color) !important;
 }
 
-.post-card .post-details-link {
+.complaint-card .complaint-details-link {
     color: var(--link-color) !important;
 }
 
@@ -565,4 +615,119 @@ a {
     background-color: var(--btn-hover-color) !important;
     border-color: var(--btn-hover-color) !important;
     color: var(--bg-color) !important;
+}
+
+.complaints-grid {
+    margin-top: 1.5rem;
+}
+
+.complaints-grid {
+    margin-bottom: 1.5rem;
+}
+
+.complaint-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.complaint-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.complaint-card-tag {
+    display: inline-block;
+    background: #e9ecef;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.complaint-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.complaint-votes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.complaint-upvotes,
+.complaint-downvotes {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.complaint-details-btn {
+    background: none;
+    border: none;
+    color: #0d6efd;
+    font-weight: 500;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.complaint-details-btn:hover,
+.complaint-details-btn:focus {
+    color: #0a58ca;
+    text-decoration: underline;
+}
+
+.complaint-details-link {
+    color: #0d6efd;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.complaint-card * {
+    pointer-events: none;
+}
+
+.complaint-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.complaint-card .vote-count {
+    font-size: 0.875rem;
+}
+
+.complaint-card .complaint-upvotes,
+.complaint-card .complaint-downvotes {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.complaint-card .complaint-details-btn {
+    background: none;
+    border: none;
+    color: #0d6efd;
+    font-weight: 500;
+    padding: 0;
+    cursor: pointer;
+}
+
+.complaint-card .complaint-details-link {
+    color: #0d6efd;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }

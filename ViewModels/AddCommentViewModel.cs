@@ -4,7 +4,7 @@ namespace Baynatna.ViewModels
 {
     public class AddCommentViewModel
     {
-        public int PostId { get; set; }
+        public int ComplaintId { get; set; }
 
         [Required(ErrorMessage = "Comment text is required")]
         [MinLength(1, ErrorMessage = "Comment cannot be empty")]

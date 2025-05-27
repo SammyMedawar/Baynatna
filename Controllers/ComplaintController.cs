@@ -6,13 +6,13 @@ using Baynatna.Repositories.Interfaces;
 
 namespace Baynatna.Controllers
 {
-    public class PostController : Controller
+    public class ComplaintController : Controller
     {
-        private readonly IPostService _postService;
+        private readonly IComplaintService _complaintService;
         private readonly ITagRepository _tagRepository;
-        public PostController(IPostService postService, ITagRepository tagRepository)
+        public ComplaintController(IComplaintService complaintService, ITagRepository tagRepository)
         {
-            _postService = postService;
+            _complaintService = complaintService;
             _tagRepository = tagRepository;
         }
 
@@ -27,7 +27,7 @@ namespace Baynatna.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreatePostViewModel model)
+        public async Task<IActionResult> Create(CreateComplaintViewModel model)
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
                 return RedirectToAction("Login", "User");
@@ -38,7 +38,7 @@ namespace Baynatna.Controllers
                 return View(model);
             }
             var userId = HttpContext.Session.GetInt32("UserId").Value;
-            var result = await _postService.CreatePostAsync(userId, model);
+            var result = await _complaintService.CreateComplaintAsync(userId, model);
             if (!result.Success)
             {
                 var tags = await _tagRepository.GetAllAsync();
@@ -46,27 +46,26 @@ namespace Baynatna.Controllers
                 ModelState.AddModelError(string.Empty, result.ErrorMessage);
                 return View(model);
             }
-            // TODO: Redirect to post details or home for now
-            return RedirectToAction("Index", "Post");
+            return RedirectToAction("Index", "Complaint");
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] PostListQuery query)
+        public async Task<IActionResult> Index([FromQuery] ComplaintListQuery query)
         {
-            var postsResult = await _postService.GetPostsAsync(query);
-            var tags = await _postService.GetAllTagsAsync();
+            var complaintsResult = await _complaintService.GetComplaintsAsync(query);
+            var tags = await _complaintService.GetAllTagsAsync();
             ViewBag.Tags = tags;
             ViewBag.Query = query;
-            return View(postsResult);
+            return View(complaintsResult);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Vote(int postId, bool isUpvote, string reason)
+        public async Task<IActionResult> Vote(int complaintId, bool isUpvote, string reason)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
                 return Json(new { success = false, error = "You must be logged in to vote." });
-            var result = await _postService.VoteAsync(userId.Value, postId, isUpvote, reason);
+            var result = await _complaintService.VoteAsync(userId.Value, complaintId, isUpvote, reason);
             if (result.Success)
                 return Json(new { success = true });
             return Json(new { success = false, error = result.ErrorMessage });
@@ -76,10 +75,10 @@ namespace Baynatna.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-            var post = await _postService.GetPostDetailsAsync(id, userId);
-            if (post == null)
+            var complaint = await _complaintService.GetComplaintDetailsAsync(id, userId);
+            if (complaint == null)
                 return NotFound();
-            return View(post);
+            return View(complaint);
         }
 
         [HttpPost]
@@ -88,7 +87,7 @@ namespace Baynatna.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
                 return RedirectToAction("Login", "User");
-            var result = await _postService.DeletePostAsync(id, userId.Value);
+            var result = await _complaintService.DeleteComplaintAsync(id, userId.Value);
             if (!result.Success)
             {
                 TempData["Error"] = result.ErrorMessage;
@@ -103,7 +102,7 @@ namespace Baynatna.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please fill in all required fields.";
-                return RedirectToAction("Details", new { id = model.PostId, action = model.VoteAction });
+                return RedirectToAction("Details", new { id = model.ComplaintId, action = model.VoteAction });
             }
 
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -114,37 +113,37 @@ namespace Baynatna.Controllers
             if (string.IsNullOrWhiteSpace(model.Body?.Trim()))
             {
                 TempData["Error"] = "Comment text is required.";
-                return RedirectToAction("Details", new { id = model.PostId, action = model.VoteAction });
+                return RedirectToAction("Details", new { id = model.ComplaintId, action = model.VoteAction });
             }
 
             if (string.IsNullOrWhiteSpace(model.VoteAction))
             {
                 TempData["Error"] = "Please select upvote or downvote.";
-                return RedirectToAction("Details", new { id = model.PostId });
+                return RedirectToAction("Details", new { id = model.ComplaintId });
             }
 
-            var result = await _postService.AddCommentAsync(userId.Value, model);
+            var result = await _complaintService.AddCommentAsync(userId.Value, model);
             if (!result.Success)
             {
                 TempData["Error"] = result.ErrorMessage;
-                return RedirectToAction("Details", new { id = model.PostId, action = model.VoteAction });
+                return RedirectToAction("Details", new { id = model.ComplaintId, action = model.VoteAction });
             }
 
-            return RedirectToAction("Details", new { id = model.PostId });
+            return RedirectToAction("Details", new { id = model.ComplaintId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteComment(int id, int postId)
+        public async Task<IActionResult> DeleteComment(int id, int complaintId)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
                 return RedirectToAction("Login", "User");
-            var result = await _postService.DeleteCommentAsync(id, userId.Value);
+            var result = await _complaintService.DeleteCommentAsync(id, userId.Value);
             if (!result.Success)
             {
                 TempData["Error"] = result.ErrorMessage;
             }
-            return RedirectToAction("Details", new { id = postId });
+            return RedirectToAction("Details", new { id = complaintId });
         }
     }
 } 

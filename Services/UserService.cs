@@ -45,18 +45,17 @@ namespace Baynatna.Services
             var user = new User { Username = username };
             user.PasswordHash = _passwordHasher.HashPassword(user, password);
             await _userRepository.AddAsync(user);
-            await _userRepository.SaveChangesAsync();
 
             verificationToken.IsUsed = true;
             verificationToken.IssuedToUserId = user.Id;
-            _tokenRepository.Update(verificationToken);
-            await _tokenRepository.SaveChangesAsync();
+            await _tokenRepository.UpdateAsync(verificationToken);
             return new ServiceResult { Success = true };
         }
 
         public async Task<ServiceResult> RequestTokenAsync(string phone, string email, string idOrProof)
         {
             // TODO: Implement token request logic (e.g., store request, notify admin, etc.)
+            await Task.CompletedTask;
             return new ServiceResult { Success = true };
         }
     }

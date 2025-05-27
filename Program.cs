@@ -14,8 +14,10 @@ builder.Services.AddDbContext<BaynatnaContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVerificationTokenRepository, VerificationTokenRepository>();
-builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IComplaintService, ComplaintService>();
+builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
+builder.Services.AddScoped<IComplaintVoteRepository, ComplaintVoteRepository>();
+builder.Services.AddScoped<IComplaintAuditLogRepository, ComplaintAuditLogRepository>();
 builder.Services.AddScoped<IPasswordHasher<Baynatna.Models.User>, PasswordHasher<Baynatna.Models.User>>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IHomeService, HomeService>();

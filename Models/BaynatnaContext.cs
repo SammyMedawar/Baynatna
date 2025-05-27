@@ -6,40 +6,54 @@ namespace Baynatna.Models
 {
     public class BaynatnaContext : DbContext
     {
-        public BaynatnaContext(DbContextOptions<BaynatnaContext> options) : base(options) { }
+        public BaynatnaContext(DbContextOptions<BaynatnaContext> options) : base(options)
+        {
+        }
 
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<VerificationToken> VerificationTokens { get; set; } = null!;
-        public DbSet<Post> Posts { get; set; } = null!;
-        public DbSet<Comment> Comments { get; set; } = null!;
-        public DbSet<PostVote> PostVotes { get; set; } = null!;
-        public DbSet<CommentVote> CommentVotes { get; set; } = null!;
-        public DbSet<Tag> Tags { get; set; } = null!;
-        public DbSet<PostTag> PostTags { get; set; } = null!;
-        public DbSet<Report> Reports { get; set; } = null!;
-        public DbSet<PostAuditLog> PostAuditLogs { get; set; } = null!;
+        public DbSet<User> Users { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<ComplaintVote> ComplaintVotes { get; set; }
+        public DbSet<CommentVote> CommentVotes { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<ComplaintTag> ComplaintTags { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ComplaintAuditLog> ComplaintAuditLogs { get; set; }
+        public DbSet<VerificationToken> VerificationTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Unique constraints
-            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-            modelBuilder.Entity<VerificationToken>().HasIndex(t => t.Token).IsUnique();
-            modelBuilder.Entity<Tag>().HasIndex(t => t.Name).IsUnique();
+            base.OnModelCreating(modelBuilder);
 
-            // Composite keys
-            modelBuilder.Entity<PostTag>().HasKey(pt => new { pt.PostId, pt.TagId });
-            modelBuilder.Entity<PostVote>().HasIndex(v => new { v.PostId, v.UserId }).IsUnique();
-            modelBuilder.Entity<CommentVote>().HasIndex(v => new { v.CommentId, v.UserId }).IsUnique();
+            // Configure unique constraints
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<VerificationToken>()
+                .HasIndex(vt => vt.Token)
+                .IsUnique();
+
+            modelBuilder.Entity<ComplaintVote>()
+                .HasIndex(cv => new { cv.ComplaintId, cv.UserId })
+                .IsUnique();
+
+            modelBuilder.Entity<CommentVote>()
+                .HasIndex(cv => new { cv.CommentId, cv.UserId })
+                .IsUnique();
+
+            modelBuilder.Entity<ComplaintTag>()
+                .HasKey(ct => new { ct.ComplaintId, ct.TagId });
 
             // Relationships
-            modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Post)
-                .WithMany(p => p.PostTags)
-                .HasForeignKey(pt => pt.PostId);
-            modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Tag)
-                .WithMany(t => t.PostTags)
-                .HasForeignKey(pt => pt.TagId);
+            modelBuilder.Entity<ComplaintTag>()
+                .HasOne(ct => ct.Complaint)
+                .WithMany(c => c.ComplaintTags)
+                .HasForeignKey(ct => ct.ComplaintId);
+            modelBuilder.Entity<ComplaintTag>()
+                .HasOne(ct => ct.Tag)
+                .WithMany(t => t.ComplaintTags)
+                .HasForeignKey(ct => ct.TagId);
         }
     }
 }
