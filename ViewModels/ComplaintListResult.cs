@@ -18,6 +18,9 @@ namespace Baynatna.ViewModels
         public Guid ThreadId { get; set; }
         public string OriginalBody { get; set; } = null!;
         public string Title { get; set; } = null!;
+        public string OriginalTitle { get; set; } = null!;
+        public string? TranslatedTitle { get; set; }
+        public string? TranslatedBody { get; set; }
         public string? Tag { get; set; }
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }

@@ -62,7 +62,14 @@ namespace Baynatna.Controllers
                     Id = c.Id,
                     ThreadId = c.ThreadId,
                     OriginalBody = c.OriginalBody,
-                    // Map other properties as needed
+                    Title = !string.IsNullOrWhiteSpace(c.TranslatedTitle) ? c.TranslatedTitle : c.OriginalTitle,
+                    OriginalTitle = c.OriginalTitle,
+                    TranslatedTitle = c.TranslatedTitle,
+                    TranslatedBody = c.TranslatedBody,
+                    Tag = c.ComplaintTags.FirstOrDefault()?.Tag?.Name,
+                    Upvotes = c.Upvotes,
+                    Downvotes = c.Downvotes,
+                    CommentCount = c.Comments?.Count ?? 0
                 }).ToList()
             };
 
