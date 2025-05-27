@@ -15,6 +15,8 @@ namespace Baynatna.ViewModels
     public class ComplaintListItemViewModel
     {
         public int Id { get; set; }
+        public Guid ThreadId { get; set; }
+        public string OriginalBody { get; set; } = null!;
         public string Title { get; set; } = null!;
         public string? Tag { get; set; }
         public int Upvotes { get; set; }

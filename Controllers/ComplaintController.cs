@@ -37,13 +37,13 @@ namespace Baynatna.Controllers
                 ViewBag.Tags = tags.ToList();
                 return View(model);
             }
-            var userId = HttpContext.Session.GetInt32("UserId").Value;
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var result = await _complaintService.CreateComplaintAsync(userId, model);
             if (!result.Success)
             {
                 var tags = await _tagRepository.GetAllAsync();
                 ViewBag.Tags = tags.ToList();
-                ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "An unknown error occurred.");
                 return View(model);
             }
             return RedirectToAction("Index", "Complaint");
@@ -52,12 +52,25 @@ namespace Baynatna.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] ComplaintListQuery query)
         {
-            var complaintsResult = await _complaintService.GetComplaintsAsync(query);
+            var complaints = await _complaintService.GetComplaintsAsync(query);
             var tags = await _complaintService.GetAllTagsAsync();
+
+            var viewModel = new ComplaintListResult
+            {
+                Complaints = complaints.Select(c => new ComplaintListItemViewModel
+                {
+                    Id = c.Id,
+                    ThreadId = c.ThreadId,
+                    OriginalBody = c.OriginalBody,
+                    // Map other properties as needed
+                }).ToList()
+            };
+
             ViewBag.Tags = tags;
             ViewBag.Query = query;
-            return View(complaintsResult);
+            return View(viewModel); 
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Vote(int complaintId, bool isUpvote, string reason)

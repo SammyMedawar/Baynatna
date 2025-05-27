@@ -24,7 +24,7 @@ namespace Baynatna.Controllers
             var result = await _userService.LoginAsync(model.Username, model.Password);
             if (!result.Success)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "An unknown error occurred.");
                 return View(model);
             }
             // Set user id in session
@@ -46,7 +46,7 @@ namespace Baynatna.Controllers
             var result = await _userService.RegisterAsync(model.Username, model.Password, model.ConfirmPassword, model.Token);
             if (!result.Success)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "An unknown error occurred.");
                 return View(model);
             }
             return RedirectToAction("Login");
@@ -70,7 +70,7 @@ namespace Baynatna.Controllers
             var result = await _userService.RequestTokenAsync(model.Phone, model.Email, model.IdOrProof);
             if (!result.Success)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "An unknown error occurred.");
                 return View(model);
             }
             ViewBag.Message = "Token request submitted.";
