@@ -3,14 +3,13 @@
     height: 40vh;
     min-width: unset;
     max-width: unset;
-    background: #e0e0e0 url('https://via.placeholder.com/1200x500?text=Baynatna+Hero+Banner') center/cover no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border-radius: 1rem;
     margin: 2rem 0 3rem 0;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
 }
 .home-options {
     display: flex;
